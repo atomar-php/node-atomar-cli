@@ -1,6 +1,7 @@
 var shell = require('shelljs');
 var path = require('path');
 var fs = require('fs');
+var templateDir = path.normalize(path.join(__dirname, '../templates'));
 
 exports.command = 'make <name>';
 exports.describe = 'Creates a new atomar site';
@@ -37,8 +38,8 @@ exports.handler = function(argv) {
     } catch(err) {}
 
     console.log('Creating "' + argv.name + '" at ' + siteDir);
-    shell.exec('mkdir -p' + siteDir);
-    shell.exec('cp -r templates/app/* ' + siteDir);
+    shell.exec('mkdir -p ' + siteDir);
+    shell.exec('cp -r ' + templateDir + '/app/* ' + siteDir);
 
     // update package
     var packageFile = path.join(siteDir, 'package.json');

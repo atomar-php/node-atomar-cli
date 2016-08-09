@@ -1,6 +1,6 @@
 {
   "name": "atomar",
-  "version": "0.4.0",
+  "version": "0.4.3",
   "atomarVersion": "5.0.0",
   "description": "A command line tool to create and deploy atomar sites",
   "main": "./atomar.js",
