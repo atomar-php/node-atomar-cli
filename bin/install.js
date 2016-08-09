@@ -1,28 +1,19 @@
-var shell = require('shelljs');
 var fs = require('fs');
+var lib = require('../lib');
 
-exports.command = 'install <path>';
-exports.describe = 'Installs an instance of atomar to the path';
+exports.command = 'install <name>';
+exports.describe = 'Installs an atomar module';
 exports.builder = {
+    g: {
+        alias: 'g',
+        description: 'Install the module globally',
+        default: false
+    },
     ssh: {
-        default: false,
+        default: true,
         description: 'clone via ssh'
     }
 };
 exports.handler = function(argv) {
-    try {
-        if (fs.statSync(argv.path).isDirectory()) {
-            console.error('The directory already exists at ' + argv.path);
-            console.error('Aborting...');
-            return;
-        }
-    } catch(err) {}
-
-    console.log('Cloning atomar to ' + argv.path);
-    // TODO: make sure parent directories exist
-    if(argv.ssh) {
-        shell.exec('git clone git@github.com:neutrinog/atomar.git ' + argv.path);
-    } else {
-        shell.exec('git clone https://github.com/neutrinog/atomar.git ' + argv.path);
-    }
+    lib.install_module(argv.name, argv.g ? null : 'atomar_modules', argv.ssh);
 };
