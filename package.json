@@ -1,5 +1,5 @@
 {
-  "name": "atomar-cli",
+  "name": "atomar",
   "version": "0.2.0",
   "atomarVersion": "5.0.0",
   "description": "A command line tool to create and deploy atomar sites",
