@@ -35,7 +35,7 @@ function menu() {
  */
 function url() {
     return array(
-        '/api/(?P<api>[a-zA-Z\_-]+)/?(\?.*)?' => 'app\controller\API',
+        '/api/(?P<api>[a-zA-Z\_-]+)/?(\?.*)?' => 'app\controller\Api',
         '/(\?.*)?' => 'app\controller\Index'
     );
 }
