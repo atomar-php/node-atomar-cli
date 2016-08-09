@@ -6,8 +6,7 @@ exports.command = 'make <name>';
 exports.describe = 'Creates a new atomar site';
 exports.builder = {
     dir: {
-        default: process.cwd(),
-        description: 'The parent directory where the site will be created'
+        description: 'The directory where the site will be created'
     },
     d: {
         alias: 'desc',
@@ -21,7 +20,13 @@ exports.builder = {
     }
 };
 exports.handler = function(argv) {
-    var siteDir = path.join(argv.dir, argv.name.toLowerCase().replace(/\s+/g, '-'));
+    var siteDir;
+    if(argv.dir) {
+        siteDir = path.resolve(argv.dir);
+    } else {
+        siteDir = path.resolve(argv.name.toLowerCase().replace(/\s+/g, '-'));
+    }
+
 
     try {
         if (fs.statSync(siteDir).isDirectory()) {
@@ -32,7 +37,7 @@ exports.handler = function(argv) {
     } catch(err) {}
 
     console.log('Creating "' + argv.name + '" at ' + siteDir);
-    shell.exec('mkdir ' + siteDir);
+    shell.exec('mkdir -p' + siteDir);
     shell.exec('cp -r templates/app/* ' + siteDir);
 
     // update package
