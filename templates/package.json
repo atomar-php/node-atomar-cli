@@ -1,0 +1,13 @@
+{
+  "name": "Rapport Core",
+  "version": "4.0.0",
+  "description": "A business management tool specifically designed for small businesses",
+  "atomarVersion": "5.x",
+  "dependencies": {
+    "fancy_fields": "1.0",
+    "file_drop": "1.0",
+    "infinite_scroll": "1.0",
+    "crypto": "1.0",
+    "captcha": "1.0"
+  }
+}
