@@ -6,8 +6,9 @@ var commandDir = './bin';
 fs.readdir(commandDir, function(err, commands) {
     var argv = require('yargs')
         .commandDir('./bin')
-        .showHelpOnFail(true, 'Specify --help for available options')
         .help('help')
         .alias('h', 'help')
+        .strict(true)
+        .demand(1)
         .argv;
 });

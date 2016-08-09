@@ -10,15 +10,15 @@ function permission() {
     return array();
 }
 
-function preprocess_boot() {
+function pre_process_boot() {
 
 }
 
-function postprocess_boot() {
+function post_process_boot() {
 
 }
 
-function preprocess_page() {
+function pre_process_page() {
 
 }
 
@@ -35,17 +35,8 @@ function menu() {
  */
 function url() {
     return array(
-        '/!/app/(?P<api>[a-zA-Z\_-]+)/?(\?.*)?' => 'app\controller\API',
+        '/api/(?P<api>[a-zA-Z\_-]+)/?(\?.*)?' => 'app\controller\API',
         '/(\?.*)?' => 'app\controller\Index'
-    );
-}
-
-/**
- * Implements hook_libraries()
- */
-function libraries() {
-    return array(
-        'AppAPI.php'
     );
 }
 

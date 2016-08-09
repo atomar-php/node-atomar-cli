@@ -1,13 +1,18 @@
 var shell = require('shelljs');
 var path = require('path');
+var fs = require('fs');
 
 exports.command = 'make <name>';
 exports.describe = 'Creates a new atomar site';
 exports.builder = {
-    d: {
-        alias: 'dir',
+    dir: {
         default: process.cwd(),
         description: 'The parent directory where the site will be created'
+    },
+    d: {
+        alias: 'desc',
+        default: '',
+        description: 'Provides a description of the site'
     },
     g: {
         alias: 'git',
@@ -17,13 +22,30 @@ exports.builder = {
 };
 exports.handler = function(argv) {
     var siteDir = path.join(argv.dir, argv.name.toLowerCase().replace(/\s+/g, '-'));
-    console.log('Creating "' + argv.name + '" at ' + siteDir);
-    shell.exec('mkdir ' + siteDir + ' && git init ' + siteDir);
-    shell.exec('cp templates/AppAPI.php ' + siteDir);
-    shell.exec('cp templates/hooks.php ' + siteDir);
-    shell.exec('cp templates/install.php ' + siteDir);
-    shell.exec('cp templates/package.json ' + siteDir);
-    // TODO: update package.json to use the atomar version currently installed
 
-    shell.exec('cd ' + siteDir + ' && git add . && git commit -m "initial commit"');
+    try {
+        if (fs.statSync(siteDir).isDirectory()) {
+            console.error('The directory already exists at ' + siteDir);
+            console.error('Aborting...');
+            return;
+        }
+    } catch(err) {}
+
+    console.log('Creating "' + argv.name + '" at ' + siteDir);
+    shell.exec('mkdir ' + siteDir);
+    shell.exec('cp -r templates/* ' + siteDir);
+
+    // update package
+    var packageFile = path.join(siteDir, 'package.json');
+    var p = require(packageFile);
+    p.name = argv.name;
+    p.description = argv.desc;
+    p.atomarVersion = require('../package.json').atomarVersion;
+    // TODO: add dependencies. maybe in another command
+    fs.writeFileSync(packageFile, JSON.stringify(p, null, 2));
+
+    // initialize git
+    if(argv.git) {
+        shell.exec('cd ' + siteDir + ' && git init && git add . && git commit -m "initial commit"');
+    }
 };

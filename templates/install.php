@@ -6,7 +6,7 @@ namespace app;
  * Implements hook_uninstall()
  */
 function uninstall() {
-    // perform uninstall operations here
+    // TODO: perform uninstall operations here
     return true;
 }
 
@@ -14,6 +14,6 @@ function uninstall() {
  * Implements hook_update_version()
  */
 function update_1() {
-    // perform update operations here
+    // TODO: perform update operations here
     return true;
 }
