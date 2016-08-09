@@ -33,7 +33,7 @@ exports.handler = function(argv) {
 
     console.log('Creating "' + argv.name + '" at ' + siteDir);
     shell.exec('mkdir ' + siteDir);
-    shell.exec('cp -r templates/* ' + siteDir);
+    shell.exec('cp -r templates/app/* ' + siteDir);
 
     // update package
     var packageFile = path.join(siteDir, 'package.json');
