@@ -1,7 +1,7 @@
 {
   "name": "atomar-cli",
-  "version": "0.5.0",
-  "atomarVersion": "5.0.0",
+  "version": "0.6.0",
+  "atomarVersion": "1.0.0",
   "description": "A command line tool to create and deploy atomar sites",
   "main": "./atomar.js",
   "scripts": {
