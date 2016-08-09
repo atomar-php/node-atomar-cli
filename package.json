@@ -1,6 +1,6 @@
 {
   "name": "atomar",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "atomarVersion": "5.0.0",
   "description": "A command line tool to create and deploy atomar sites",
   "main": "./atomar.js",
@@ -24,6 +24,10 @@
   "homepage": "https://github.com/neutrinog/node-atomar-cli#readme",
   "devDependencies": {
     "jest": "^14.1.0"
+  },
+  "preferGlobal": true,
+  "bin": {
+    "atomar": "atomar.js"
   },
   "dependencies": {
     "fs": "0.0.2",
