@@ -5,7 +5,7 @@ Atomar is currently proprietary, however it may become open sourced in the futur
 
 ##Installing
 ```
-npm install -g atomar
+npm install -g atomar-cli
 ```
 
 ##Usage
