@@ -16,7 +16,7 @@ exports.handler = function(argv) {
     console.log('Deploying to ' + deploy_path);
     shell.exec('mkdir -p ' + deploy_path);
     fs.writeFileSync(path.join(deploy_path, 'index.php'), '<?php\n\n' +
-        'require_once("'+ path.resolve(atomar_path) + '");\n\n' +
+        'require_once("'+ path.resolve(atomar_path) + '/Atomar.php");\n\n' +
         '\\Atomar\\Atomar::init("config.json");\n' +
         '\\Atomar\\Atomar::run();');
     shell.exec('cp -r ' + templateDir + '/deploy/. ' + deploy_path);
