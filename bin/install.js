@@ -4,7 +4,7 @@ var lib = require('../lib');
 exports.command = 'install <name>';
 exports.describe = 'Installs an atomar module';
 exports.builder = {
-    g: {
+    global: {
         alias: 'g',
         description: 'Install the module globally',
         default: false
