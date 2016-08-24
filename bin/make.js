@@ -80,7 +80,7 @@ exports.handler = function(argv) {
         });
         rimraf.sync(path.join(siteDir, 'controller/Index.php'));
         rimraf.sync(path.join(siteDir, 'views'));
-        lib.replaceInFile(path.join(siteDir, 'hooks.php'), /\,n.*app\\controller\\Index.*&/g, '' + argv.name);
+        lib.replaceInFile(path.join(siteDir, 'hooks.php'), /\,\n.*app\\controller\\Index.*/g, '');
     }
 
     // initialize git
