@@ -1,6 +1,6 @@
 {
   "name": "atomar-cli",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "atomarVersion": "1.0.0",
   "description": "A command line tool to create and deploy atomar sites",
   "main": "./atomar.js",
@@ -30,6 +30,7 @@
     "atomar": "atomar.js"
   },
   "dependencies": {
+    "rimraf": "^2.5.4",
     "shelljs": "^0.7.3",
     "yargs": "^4.8.1"
   }

@@ -23,6 +23,18 @@ function fileExists(file) {
 }
 
 /**
+ * Replaces a matched string in a file
+ * @param filePath
+ * @param matcher regex
+ * @param replacement string
+ */
+function replaceInFile(filePath, matcher, replacement) {
+    var data = fs.readFileSync(filePath, 'utf8');
+    data = data.replace(matcher, replacement);
+    fs.writeFileSync(filePath, data, 'utf8');
+}
+
+/**
  * Installs an atomar module
  * @param module_name
  * @param install_path if left null the module will be installed globally
@@ -85,5 +97,6 @@ function lookup_module(name) {
 
 module.exports = {
     lookup_module: lookup_module,
-    install_module: install_module
+    install_module: install_module,
+    replaceInFile: replaceInFile
 };
