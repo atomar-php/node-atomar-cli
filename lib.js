@@ -1,3 +1,5 @@
+'use strict';
+
 var shell = require('shelljs');
 var path = require('path');
 var fs = require('fs');
@@ -5,6 +7,20 @@ var store = require('./module_store');
 
 // TODO: set the appropriate path for the os
 var modules_dir = '/usr/local/lib/atomar_modules';
+
+/**
+ * Checks if the file exists
+ * @param file
+ * @returns {boolean}
+ */
+function fileExists(file) {
+    try {
+        fs.statSync(file);
+        return true;
+    } catch(err) {
+        return false;
+    }
+}
 
 /**
  * Installs an atomar module
@@ -30,11 +46,21 @@ function install_module(module_name, install_path, clone_with_ssh) {
             install_path = path.join(install_path, module_name);
         }
 
-        console.log('Installing ' + module_name + '...');
-        var cmd = 'git clone ' + remote + ' ' + install_path;
-        if(global_install) {
-            shell.exec('sudo mkdir -p ' + modules_dir);
-            cmd = 'sudo ' + cmd;
+        var cmd;
+        if(fileExists(install_path)) {
+            console.log('Updating ' + module_name + '...');
+            cmd = 'git pull origin master';
+            if(global_install) {
+                cmd = 'sudo ' + cmd;
+            }
+            cmd = 'cd ' + install_path + ' && ' + cmd;
+        } else {
+            console.log('Installing ' + module_name + '...');
+            cmd = 'git clone ' + remote + ' ' + install_path;
+            if(global_install) {
+                shell.exec('sudo mkdir -p ' + modules_dir);
+                cmd = 'sudo ' + cmd;
+            }
         }
         shell.exec(cmd);
     } else {
