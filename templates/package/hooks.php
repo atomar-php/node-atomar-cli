@@ -41,6 +41,13 @@ function url() {
 }
 
 /**
+ * Implements hook_libraries()
+ */
+function libraries() {
+    return array ();
+}
+
+/**
  * Implements hook_cron()
  */
 function cron() {

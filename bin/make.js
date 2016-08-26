@@ -68,6 +68,7 @@ exports.handler = function(argv) {
     fs.writeFileSync(packageFile, JSON.stringify(p, null, 2));
 
     // format package as module
+    // TODO: we need to use placeholders and inject the correct info rather than parsing through everything after the fact
     if(argv.type === 'module') {
         console.log('formatting as module...');
         var files = [
