@@ -95,8 +95,71 @@ function lookup_module(name) {
     return null;
 }
 
+
+/**
+ * Turns a standard callback method into a promise-style method.
+ *  Assumes standard node.js style:
+ *      someFunction(arg1, arg2, function(err, data) { ... })
+ *
+ *  This will pass the proper number of arguments and convert
+ *      the callback structure to a Promise.
+ *
+ * e.g. var readdir = promisify(fs, 'readdir'),
+ *          readdir('something').then(someFunction);
+ *
+ *      var rm = promisify(rimraf),
+ *          rm('something').then(someFunction);
+ *
+ * @param module
+ * @param fn
+ * @returns {function.<Promise>} a new function that returns a promise
+ */
+function promisify(module, fn) {
+    var hasModule = typeof module !== 'function',
+        f = hasModule ? module[fn] : module,
+        mod = hasModule ? module : null;
+
+    return function () {
+        var args = [],
+            i = arguments.length - 1;
+
+        /**
+         *  Don't pass an arguments list that has undefined values at the end.
+         *      This is so the callback for function gets passed in the right slot.
+         *
+         *      If the function gets passed:
+         *          f(arg1, arg2, undefined, cb)
+         *
+         *      ...it will think it got an undefined cb.
+         *
+         *      We instead want it to get passed:
+         *          f(arg1, arg2, cb)
+         *
+         *      Before:    [arg1, null, undefined, arg2, undefined, undefined]
+         *      After:     [arg1, null, undefined, arg2]
+         */
+        while (i >= 0 && typeof arguments[i] === 'undefined') {
+            --i;
+        }
+        while (i >= 0) {
+            args.unshift(arguments[i]);
+            --i;
+        }
+
+        return new Promise(function (resolve, reject) {
+            try {
+                resolve(f.apply(mod, args));
+            } catch (err) {
+                reject(err);
+            }
+        });
+    };
+}
+
 module.exports = {
     lookup_module: lookup_module,
     install_module: install_module,
-    replaceInFile: replaceInFile
+    replaceInFile: replaceInFile,
+    fileExists: fileExists,
+    promisify: promisify
 };
