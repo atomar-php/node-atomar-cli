@@ -4,9 +4,49 @@ var shell = require('shelljs');
 var path = require('path');
 var fs = require('fs');
 var store = require('./module_store');
+var mkdirp = require('mkdirp');
 
 // TODO: set the appropriate path for the os
 var modules_dir = '/usr/local/lib/atomar_modules';
+
+var spec = {
+    controllers_dir: 'controllers',
+    views_dir: 'views',
+    package_file: 'atomar.json'
+};
+
+/**
+ * Injects a template
+ * @param source {string}
+ * @param destination {string}
+ * @param values {{}} a map of values to be replaced in the template
+ */
+function injectTemplate(source, destination, values) {
+    values = values || {};
+    var data = fs.readFileSync(source, 'utf8');
+    for(var key of Object.keys(values)) {
+        var match = new RegExp('\{\{' + key + '\}\}', 'g');
+        data = data.replace(match, values[key]);
+    }
+    mkdirp(path.dirname(destination));
+    if(fileExists(destination)) throw new Error('The path already exists', destination);
+    fs.writeFileSync(destination, data, 'utf8');
+}
+
+/**
+ * Loads the package in the current dir
+ *
+ * @returns {{}|null} null if the package does not exist
+ */
+function loadPackage() {
+    try {
+        var data = fs.readFileSync(path.join(process.cwd(), spec.package_file));
+        return JSON.parse(data);
+    } catch (err) {
+        console.error(err);
+    }
+    return null;
+}
 
 /**
  * Checks if the file exists
@@ -157,9 +197,12 @@ function promisify(module, fn) {
 }
 
 module.exports = {
+    injectTemplate: injectTemplate,
+    loadPackage: loadPackage,
     lookup_module: lookup_module,
     install_module: install_module,
     replaceInFile: replaceInFile,
     fileExists: fileExists,
-    promisify: promisify
+    promisify: promisify,
+    get spec() { return spec }
 };

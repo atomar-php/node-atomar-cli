@@ -1,10 +1,33 @@
-exports.command = 'api <url>';
+'use strict';
+
+var path = require('path');
+var lib = require('../../../lib');
+var mkdirp = require('mkdirp');
+var fs = require('fs');
+
+exports.command = 'api <name>';
 exports.describe = 'Create a RESTfull API controller';
 exports.builder = {
 
 };
 exports.handler = function(argv) {
-    // TODO: build the api
+    var className = argv.name.replace(/[^a-zA-Z0-9]+/g, '');
+    var destFile = path.join(process.cwd(), lib.spec.controllers_dir, className + '.php');
+    mkdirp.sync(path.dirname(destFile));
+    if(lib.fileExists(destFile)) {
+        console.error('The path already exists', destFile);
+        return;
+    }
 
-    // ask to build the route if one does not exist
+    var info = lib.loadPackage();
+    if(!info) throw new Error('Not an atomar module. Try running inside a module/site.');
+
+
+    var templates = path.join(__dirname, 'templates');
+    lib.injectTemplate(path.join(templates, 'api.php'), destFile, {
+        namespace: info.site ? 'app\\controller' : info.id + '\\controller',
+        name: className
+    });
+
+    // TODO: ask to build the route if one does not exist
 };

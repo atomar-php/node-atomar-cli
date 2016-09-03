@@ -7,7 +7,7 @@ const mkdirp = require('mkdirp');
 const readline = require('readline');
 
 exports.command = 'init';
-exports.describe = 'Creates a an atomar.json config file in the directory';
+exports.describe = 'Creates a an ' + lib.spec.package_file + ' config file in the directory';
 exports.builder = {
     d: {
         alias: 'dir',
@@ -28,7 +28,7 @@ exports.cmd = init;
  * @returns {Promise.<string>} the path to the atomar.json file
  */
 function init(dir) {
-    let filepath = path.join(dir, 'atomar.json');
+    let filepath = path.join(dir, lib.spec.package_file);
     if(lib.fileExists(filepath)) {
         return Promise.reject(new Error(path.resolve(dir) + ' has already been initialized.'));
     }
@@ -71,6 +71,7 @@ function init(dir) {
             rl.close();
 
             // write config
+            config.id = config.name.replace(/[^a-zA-Z]+/g, '_').replace(/(^_|_$)/g, '').toLowerCase();
             mkdirp(path.dirname(filepath));
             fs.writeFileSync(filepath, JSON.stringify(config, null, 2));
             return Promise.resolve(filepath);
