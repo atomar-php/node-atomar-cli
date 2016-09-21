@@ -1,6 +1,6 @@
 <?php
 
-namespace app;
+namespace {{namespace}};
 
 /**
  * Implements hook_permission()
@@ -35,8 +35,9 @@ function menu() {
  */
 function url() {
     return array(
-        '/api/(?P<api>[a-zA-Z\_-]+)/?(\?.*)?' => 'app\controller\Api',
-        '/(\?.*)?' => 'app\controller\Index'
+       // examples:
+       // '/api/(?P<api>[a-zA-Z\_-]+)/?(\?.*)?' => 'app\controller\Api',
+       // '/(\?.*)?' => 'app\controller\Index'
     );
 }
 

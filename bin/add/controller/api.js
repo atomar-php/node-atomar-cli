@@ -11,7 +11,7 @@ exports.builder = {
 
 };
 exports.handler = function(argv) {
-    var className = argv.name.replace(/[^a-zA-Z0-9]+/g, '');
+    var className = lib.className(argv.name);
     var destFile = path.join(process.cwd(), lib.spec.controllers_dir, className + '.php');
     mkdirp.sync(path.dirname(destFile));
     if(lib.fileExists(destFile)) {
@@ -25,7 +25,7 @@ exports.handler = function(argv) {
 
     var templates = path.join(__dirname, 'templates');
     lib.injectTemplate(path.join(templates, 'api.php'), destFile, {
-        namespace: info.site ? 'app\\controller' : info.name + '\\controller',
+        namespace: info.name + '\\controller',
         name: className
     });
 

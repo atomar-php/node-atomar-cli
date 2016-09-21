@@ -33,7 +33,7 @@ function init(dir) {
         return Promise.reject(new Error(path.resolve(dir) + ' has already been initialized.'));
     }
     let config = {
-        name: path.basename(path.dirname(filepath)),
+        name: lib.machineName(path.basename(path.dirname(filepath))),
         version: '1.0.0',
         description: ''
     };
@@ -62,7 +62,7 @@ function init(dir) {
     console.log('This utility will walk you through creating an ' + lib.spec.package_file + ' file.\n');
     return question('name: (' + config.name + ') ', function(answer) {
             if(answer) {
-                let safe_name = answer.replace(/[^a-zA-Z]+/g, '_').replace(/(^_|_$)/g, '').toLowerCase();
+                let safe_name = lib.machineName(answer);
                 if (safe_name !== answer) {
                     console.log('Sorry, name can only contain alphanumeric characters and underscores. And must begin with a letter.');
                     return false;
@@ -105,6 +105,22 @@ function init(dir) {
             // write config
             mkdirp.sync(path.dirname(filepath));
             fs.writeFileSync(filepath, JSON.stringify(config, null, 2));
+
+            // copy hooks and install scripts
+            let templates = path.join(__dirname, 'init', 'templates');
+            let hooksPath = path.join(dir, 'hooks.php');
+            if(!lib.fileExists(hooksPath)) {
+                lib.injectTemplate(path.join(templates, 'hooks.php'), hooksPath, {
+                    namespace: config.name + '\\controller',
+                });
+            }
+            let installPath = path.join(dir, 'install.php');
+            if(!lib.fileExists(installPath)) {
+                lib.injectTemplate(path.join(templates, 'install.php'), installPath, {
+                    namespace: config.name + '\\controller',
+                });
+            }
+
             return Promise.resolve(filepath);
         })
         .catch(function(err) {

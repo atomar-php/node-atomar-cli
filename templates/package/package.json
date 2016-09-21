@@ -1,7 +1,0 @@
-{
-  "name": "Application Name",
-  "version": "1.0.0",
-  "description": "My awesome site",
-  "atomarVersion": "5.x",
-  "dependencies": {}
-}

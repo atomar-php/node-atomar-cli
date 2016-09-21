@@ -16,6 +16,22 @@ var spec = {
 };
 
 /**
+ * Converts a string into a class name
+ * @param string
+ */
+function className(string) {
+    return string.replace(/[^a-zA-Z0-9]+/g, '');
+}
+
+/**
+ * Converts a string to a machine safe name
+ * @param string
+ */
+function machineName(string) {
+    return string.replace(/[^a-zA-Z]+/g, '_').replace(/(^_|_$)/g, '').toLowerCase();
+}
+
+/**
  * Injects a template
  * @param source {string}
  * @param destination {string}
@@ -204,5 +220,7 @@ module.exports = {
     replaceInFile: replaceInFile,
     fileExists: fileExists,
     promisify: promisify,
+    machineName: machineName,
+    className: className,
     get spec() { return spec }
 };

@@ -1,6 +1,6 @@
 <?php
 
-namespace app;
+namespace {{namespace}};
 
 /**
  * Implements hook_uninstall()
@@ -14,6 +14,6 @@ function uninstall() {
  * Implements hook_update_version()
  */
 function update_1() {
-    // TODO: perform update operations here
+    // TODO: perform update operations for version 1 here
     return true;
 }
