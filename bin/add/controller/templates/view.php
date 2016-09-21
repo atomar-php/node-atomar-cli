@@ -3,7 +3,6 @@
 namespace {{namespace}};
 
 use atomar\core\Controller;
-use atomar\core\Templator;
 
 class {{name}} extends Controller {
 
@@ -15,6 +14,6 @@ class {{name}} extends Controller {
 
     function POST($matches = array()) {
         // routes posts on this page back to get.
-        self::GET();
+        self::GET($matches);
     }
 }

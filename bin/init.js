@@ -7,7 +7,7 @@ const mkdirp = require('mkdirp');
 const readline = require('readline');
 
 exports.command = 'init';
-exports.describe = 'Creates a an ' + lib.spec.package_file + ' config file in the directory';
+exports.describe = 'Initializes a new Atomar module.';
 exports.builder = {
     d: {
         alias: 'dir',
@@ -35,22 +35,41 @@ function init(dir) {
     let config = {
         name: path.basename(path.dirname(filepath)),
         version: '1.0.0',
-        site: true,
         description: ''
     };
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout
     });
-    const question = function(question) {
+    /**
+     *
+     * @param message {string} the question being asked
+     * @param validator {function} a function to validate the answer
+     * @returns {Promise}
+     */
+    const question = function(message, validator) {
         return new Promise(function(resolve, reject) {
-            rl.question(question, function(answer) {
-                resolve(answer);
+            rl.question(message, function(answer) {
+                if(validator && !validator(answer)) {
+                    reject();
+                } else {
+                    resolve(answer);
+                }
             });
         });
     };
 
-    return question('name: (' + config.name + ') ')
+    console.log('This utility will walk you through creating an ' + lib.spec.package_file + ' file.\n');
+    return question('name: (' + config.name + ') ', function(answer) {
+            if(answer) {
+                let safe_name = answer.replace(/[^a-zA-Z]+/g, '_').replace(/(^_|_$)/g, '').toLowerCase();
+                if (safe_name !== answer) {
+                    console.log('Sorry, name can only contain alphanumeric characters and underscores. And must begin with a letter.');
+                    return false;
+                }
+            }
+            return true;
+        })
         .then((answer) => {
             if(answer) config.name = answer;
             return question('version: (' + config.version + ') ');
@@ -61,23 +80,36 @@ function init(dir) {
         })
         .then(function(answer) {
             if (answer) config.description = answer;
-            return question('site: (' + config.site + ') ');
+            return question('keywords: ');
         })
         .then(function(answer) {
-            if(answer) config.site = answer.toLowerCase() === 'true';
-            return Promise.resolve();
+            if(answer) config.keywords = answer;
+            return question('author: ');
+        })
+        .then(function(answer) {
+            if(answer) config.author = answer;
+            console.log('\nAbout to write to ' + filepath + ':\n');
+            console.log(JSON.stringify(config, null, 2), '\n');
+            return question('Is this ok? (yes) ');
+        })
+        .then(function(answer) {
+            if(!answer || answer.toLowerCase() === 'yes') {
+                return Promise.resolve();
+            } else {
+                return Promise.reject();
+            }
         })
         .then(function() {
             rl.close();
 
             // write config
-            config.id = config.name.replace(/[^a-zA-Z]+/g, '_').replace(/(^_|_$)/g, '').toLowerCase();
-            mkdirp(path.dirname(filepath));
+            mkdirp.sync(path.dirname(filepath));
             fs.writeFileSync(filepath, JSON.stringify(config, null, 2));
             return Promise.resolve(filepath);
         })
         .catch(function(err) {
             // cleanup after error
+            console.log('Aborted.');
             rl.close();
             throw err;
         });

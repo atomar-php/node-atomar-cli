@@ -25,7 +25,7 @@ exports.handler = function(argv) {
 
     var templates = path.join(__dirname, 'templates');
     lib.injectTemplate(path.join(templates, 'api.php'), destFile, {
-        namespace: info.site ? 'app\\controller' : info.id + '\\controller',
+        namespace: info.site ? 'app\\controller' : info.name + '\\controller',
         name: className
     });
 

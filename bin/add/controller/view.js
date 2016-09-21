@@ -25,9 +25,9 @@ exports.handler = function(argv) {
 
     var templates = path.join(__dirname, 'templates');
     lib.injectTemplate(path.join(templates, 'view.php'), destFile, {
-        namespace: info.site ? 'app\\controller' : info.id + '\\controller',
+        namespace: info.site ? 'app\\controller' : info.name + '\\controller',
         name: className,
-        module_id: info.id,
+        module_id: info.name,
         html_view: className.toLowerCase()
     });
     var viewFile = path.join(process.cwd(), lib.spec.views_dir, className.toLowerCase() + '.html');
@@ -35,6 +35,7 @@ exports.handler = function(argv) {
     if(!lib.fileExists(viewFile)) {
         lib.injectTemplate(path.join(templates, 'view.html'), viewFile);
     }
+
 
     // TODO: ask to build the route if one does not exist
 };
