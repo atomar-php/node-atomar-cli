@@ -27,14 +27,14 @@ exports.handler = function(argv) {
     var atomar_path = path.resolve(argv.atomar_path);
 
     var info = lib.loadPackage();
-    if(!info) throw new Error('Not an atomar module. Try running inside a module/site.');
+    if(!info) throw new Error('Not an atomar module. Try running inside a module or use --app.');
 
     // validate atomar installation
     if(!atomar_path) {
         throw new Error('An installation of atomar could not be found. Please install atomar globally or specify a custom atomar installation path with --atomar_path');
     }
 
-    console.log('Deploying "' + app_package.name + '" to ' + deploy_path);
+    console.log('Deploying "' + info.name + '" to ' + deploy_path);
     shell.exec('mkdir -p ' + deploy_path);
     fs.writeFileSync(path.join(deploy_path, 'index.php'), '<?php\n\n' +
         'require_once("'+ path.resolve(atomar_path) + '/Atomar.php");\n\n' +
