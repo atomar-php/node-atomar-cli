@@ -26,15 +26,8 @@ exports.handler = function(argv) {
     var app_path = path.resolve(argv.app_path);
     var atomar_path = path.resolve(argv.atomar_path);
 
-    // validate app_path is a valid atomar module
-    try {
-        var app_package = require(path.join(app_path, 'package.json'));
-        if(!app_package.atomarVersion || !app_package.name) {
-            throw new Error();
-        }
-    } catch(err) {
-        throw new Error(app_path + ' is not a valid atomar module.');
-    }
+    var info = lib.loadPackage();
+    if(!info) throw new Error('Not an atomar module. Try running inside a module/site.');
 
     // validate atomar installation
     if(!atomar_path) {

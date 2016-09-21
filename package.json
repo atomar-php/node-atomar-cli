@@ -1,6 +1,6 @@
 {
   "name": "atomar-cli",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "atomarVersion": "1.0.0",
   "description": "A command line tool to create and deploy atomar sites",
   "main": "./atomar.js",
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/neutrinog/node-atomar-cli.git"
   },
   "keywords": [
-    "atomic",
+    "atomar",
     "cli",
     "php"
   ],

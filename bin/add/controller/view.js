@@ -20,7 +20,7 @@ exports.handler = function(argv) {
     }
 
     var info = lib.loadPackage();
-    if(!info) throw new Error('Not an atomar module. Try running inside a module/site.');
+    if(!info) throw new Error('Not an atomar module. Try running inside a module.');
 
 
     var templates = path.join(__dirname, 'templates');
