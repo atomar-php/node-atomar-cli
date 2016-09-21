@@ -3,13 +3,19 @@ var fs = require('fs');
 var path = require('path');
 var crypto = require('crypto');
 var lib = require('../lib');
-var templateDir = path.normalize(path.join(__dirname, '../templates'));
+var rimraf = require('rimraf');
+var mkdirp = require('mkdirp');
 
 var atomar_path = lib.lookup_module('atomar');
 
 exports.command = 'deploy <deploy_path>';
 exports.describe = 'Deploys an atomar application to run on an atomar instance';
 exports.builder = {
+    f: {
+        alias: 'force',
+        default: false,
+        description: 'Overwrite an existing deployment'
+    },
     app: {
         alias: 'app_path',
         default: './',
@@ -34,19 +40,33 @@ exports.handler = function(argv) {
         throw new Error('An installation of atomar could not be found. Please install atomar globally or specify a custom atomar installation path with --atomar_path');
     }
 
-    console.log('Deploying "' + info.name + '" to ' + deploy_path);
-    shell.exec('mkdir -p ' + deploy_path);
-    fs.writeFileSync(path.join(deploy_path, 'index.php'), '<?php\n\n' +
-        'require_once("'+ path.resolve(atomar_path) + '/Atomar.php");\n\n' +
-        '\\Atomar\\Atomar::init("config.json");\n' +
-        '\\Atomar\\Atomar::run();');
-    shell.exec('cp -r ' + templateDir + '/deploy/. ' + deploy_path);
-    shell.exec('chmod 644 ' + deploy_path + '/.htaccess');
+    let configPath = path.join(deploy_path, 'config.json');
+    let htaccessPath = path.join(deploy_path, '.htaccess.json');
+    let indexPath = path.join(deploy_path, 'index.php');
 
-    // update config
-    var configFile = path.join(deploy_path, 'config.json');
-    var c = require(configFile);
-    c.app_dir = app_path;
-    c.cron_token = crypto.randomBytes(20).toString('hex');
-    fs.writeFileSync(configFile, JSON.stringify(c, null, 2));
+    // clean up existing deployment
+    if(argv.force) {
+        rimraf.sync(configPath);
+        rimraf.sync(htaccessPath);
+        rimraf.sync(indexPath);
+    }
+
+    if(lib.fileExists(configPath)) {
+        throw new Error('A deployment already exists at ' + deploy_path + '. Use -f to overwrite');
+    }
+
+    console.log('Deploying "' + info.name + '" to ' + deploy_path);
+    let templates = path.join(__dirname, 'deploy', 'templates');
+    mkdirp(deploy_path);
+    lib.injectTemplate(path.join(templates, 'index.php'), indexPath, {
+        atomar_path: path.resolve(path.join(atomar_path, 'Atomar.php'))
+    });
+    lib.injectTemplate(path.join(templates, 'config.json'), configPath, {
+        namespace: info.name,
+        cron_token: crypto.randomBytes(20).toString('hex'),
+        app_dir: app_path,
+
+    });
+    lib.injectTemplate(path.join(templates, '.htaccess'), htaccessPath);
+    shell.exec('chmod 644 ' + htaccessPath);
 };

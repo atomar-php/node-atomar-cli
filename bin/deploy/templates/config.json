@@ -3,7 +3,7 @@
     "host": "localhost",
     "user": "root",
     "password": "",
-    "name": "example_database"
+    "name": "{{namespace}}"
   },
   "auth": {
     "login_attempts": 5,
@@ -29,9 +29,9 @@
   "files": "files/",
   "cache": "cache/",
   "expires_header": 604800,
-  "cron_token": "sometoken",
+  "cron_token": "{{cron_token}}",
   "favicon": "favicon.ico",
   "ext_dir": "atomar_modules/",
-  "app_dir": "app/",
-  "app_namespace": "app"
+  "app_dir": "{{app_dir}}",
+  "app_namespace": "{{namespace}}"
 }
