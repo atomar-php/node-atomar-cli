@@ -130,6 +130,7 @@ function install_module(module_name, install_path, clone_with_ssh) {
                 cmd = 'sudo ' + cmd;
             }
         }
+        console.log('Cloning ' + remote + ' into ' + install_path);
         shell.exec(cmd);
     } else {
         throw new Error('The module "' + module_name + '" does not exist.');
