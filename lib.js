@@ -28,7 +28,7 @@ function className(string) {
  * @param string
  */
 function machineName(string) {
-    return string.replace(/[^a-zA-Z]+/g, '_').replace(/(^_|_$)/g, '').toLowerCase();
+    return string.replace(/[^a-zA-Z0-9]+/g, '_').replace(/(^_|_$)/g, '').replace(/^[0-9]+]/g, '').toLowerCase();
 }
 
 /**
