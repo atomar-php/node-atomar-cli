@@ -10,7 +10,7 @@ var mkdirp = require('mkdirp');
 var modules_dir = '/usr/local/lib/atomar_modules';
 
 var spec = {
-    controllers_dir: 'controllers',
+    controllers_dir: 'controller',
     views_dir: 'views',
     package_file: 'atomar.json'
 };
