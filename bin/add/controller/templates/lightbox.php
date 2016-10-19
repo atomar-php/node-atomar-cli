@@ -8,7 +8,7 @@ class {{name}} extends Lightbox {
 
     function GET($matches = array()) {
         echo $this->renderView('{{module_id}}/views/lightbox.{{html_view}}.html', array(
-            'greeting' => 'Hello, World!'
+            'greeting' => 'Hello, World! This is the {{module_id}} lightbox.'
         ));
     }
 
