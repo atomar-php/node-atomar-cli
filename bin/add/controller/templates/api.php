@@ -7,11 +7,11 @@ use atomar\core\ApiController;
 class {{name}} extends ApiController {
 
     function get_hello_world() {
-        return 'getting: Hello, World! This is the {{module_id}} api.';
+        return 'getting: Hello, World! This is the {{name}} api.';
     }
 
     function post_hello_world() {
-        return 'posting: Hello, World! This is the {{module_id}} api.';
+        return 'posting: Hello, World! This is the {{name}} api.';
     }
 
     /**
