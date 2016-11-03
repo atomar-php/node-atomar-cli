@@ -111,13 +111,13 @@ function init(dir) {
             let hooksPath = path.join(dir, 'hooks.php');
             if(!lib.fileExists(hooksPath)) {
                 lib.injectTemplate(path.join(templates, 'hooks.php'), hooksPath, {
-                    namespace: config.name + '\\controller',
+                    namespace: config.name,
                 });
             }
             let installPath = path.join(dir, 'install.php');
             if(!lib.fileExists(installPath)) {
                 lib.injectTemplate(path.join(templates, 'install.php'), installPath, {
-                    namespace: config.name + '\\controller',
+                    namespace: config.name,
                 });
             }
 
