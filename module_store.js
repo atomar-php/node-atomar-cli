@@ -37,7 +37,7 @@ var modules = {
     },
     file_drop: {
         owner: 'neutrinog',
-        repo: 'atomar-file_drop.git'
+        repo: 'atomar-files.git'
     },
     google_data: {
         owner: 'neutrinog',
