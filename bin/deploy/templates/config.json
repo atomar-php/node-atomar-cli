@@ -31,7 +31,7 @@
   "expires_header": 604800,
   "cron_token": "{{cron_token}}",
   "favicon": "favicon.ico",
-  "ext_dir": "atomar_modules/",
+  "ext_dir": "{{app_dir}}/atomar_modules/",
   "app_dir": "{{app_dir}}",
   "app_namespace": "{{namespace}}"
 }
