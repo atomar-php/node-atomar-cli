@@ -3,7 +3,8 @@
     "host": "localhost",
     "user": "root",
     "password": "",
-    "name": "{{namespace}}"
+    "name": "{{namespace}}",
+    "freeze": false
   },
   "auth": {
     "login_attempts": 5,
