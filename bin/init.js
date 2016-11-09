@@ -108,9 +108,9 @@ function init(dir) {
 
             // copy hooks and install scripts
             let templates = path.join(__dirname, 'init', 'templates');
-            let hooksPath = path.join(dir, 'hooks.php');
+            let hooksPath = path.join(dir, 'Hooks.php');
             if(!lib.fileExists(hooksPath)) {
-                lib.injectTemplate(path.join(templates, 'hooks.php'), hooksPath, {
+                lib.injectTemplate(path.join(templates, 'Hooks.php'), hooksPath, {
                     namespace: config.name,
                 });
             }
