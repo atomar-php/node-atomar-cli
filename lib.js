@@ -6,9 +6,6 @@ var fs = require('fs');
 var store = require('./module_store');
 var mkdirp = require('mkdirp');
 
-// TODO: set the appropriate path for the os
-var modules_dir = '/usr/local/lib/atomar_modules';
-
 var spec = {
     controllers_dir: 'controller',
     views_dir: 'views',
@@ -109,7 +106,7 @@ function install_module(module_name, install_path, clone_with_ssh) {
         }
         if(!install_path) {
             global_install = true;
-            install_path = path.join(modules_dir, module_name);
+            install_path = path.join(modulesDir(), module_name);
         } else {
             install_path = path.join(install_path, module_name);
         }
@@ -118,23 +115,65 @@ function install_module(module_name, install_path, clone_with_ssh) {
         if(fileExists(install_path)) {
             console.log('Updating ' + module_name + '...');
             cmd = 'git pull origin master';
-            if(global_install) {
-                cmd = 'sudo ' + cmd;
-            }
             cmd = 'cd ' + install_path + ' && ' + cmd;
         } else {
             console.log('Installing ' + module_name + '...');
             cmd = 'git clone ' + remote + ' ' + install_path;
-            if(global_install) {
-                shell.exec('sudo mkdir -p ' + modules_dir);
-                cmd = 'sudo ' + cmd;
-            }
         }
-        console.log('Cloning ' + remote + ' into ' + install_path);
         shell.exec(cmd);
+
+        if(fileExists(path.join(install_path, 'composer.json'))) run_composer(install_path);
     } else {
         throw new Error('The module "' + module_name + '" does not exist.');
     }
+}
+
+/**
+ * Returns the atomar cli root dir.
+ * This is where we store global things.
+ * @returns {*}
+ */
+function rootDir() {
+    var home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+    var root = path.join(home, '.atomar_cli');
+    mkdirp.sync(root);
+    return root;
+}
+
+/**
+ * Returns the path to the global modules directory
+ * @returns {*}
+ */
+function modulesDir() {
+    var dir = path.join(rootDir(), 'atomar_modules');
+    mkdirp.sync(dir);
+    return dir;
+}
+
+/**
+ * Runs composer in the working dir.
+ * If composer is not installed it will be downloaded to the working dir
+ *
+ * @param working_dir
+ */
+function run_composer(working_dir) {
+    var cmd;
+
+    // fetch composer
+    var composer_installer = path.join(rootDir(), 'composer.php');
+    var composer = path.join(rootDir(), 'composer.phar');
+    if(!fileExists(composer)) {
+        console.log('Getting composer');
+        cmd = 'curl -sS https://getcomposer.org/installer -o ' + composer_installer;
+        cmd += ' && php ' + composer_installer + ' --install-dir=' + rootDir();
+        cmd += ' && rm ' + composer_installer;
+        shell.exec(cmd);
+    }
+
+    // run
+    console.log('Installing dependencies');
+    cmd = composer + ' install -d=' + working_dir;
+    shell.exec(cmd);
 }
 
 /**
@@ -143,7 +182,7 @@ function install_module(module_name, install_path, clone_with_ssh) {
  * @returns string
  */
 function lookup_module(name) {
-    var dir = path.join(modules_dir, name);
+    var dir = path.join(modulesDir(), name);
     try {
         if (fs.statSync(dir).isDirectory()) {
             return dir;

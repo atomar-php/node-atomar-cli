@@ -10,7 +10,7 @@ exports.builder = {
         default: false
     },
     ssh: {
-        default: true,
+        default: false,
         description: 'clone via ssh'
     }
 };

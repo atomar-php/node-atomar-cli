@@ -35,7 +35,7 @@ var modules = {
         owner: 'neutrinog',
         repo: 'atomar-fancy_fields.git'
     },
-    file_drop: {
+    files: {
         owner: 'neutrinog',
         repo: 'atomar-files.git'
     },
