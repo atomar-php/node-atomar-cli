@@ -104,7 +104,7 @@ function init(dir) {
 
             // write config
             mkdirp.sync(path.dirname(filepath));
-            fs.writeFileSync(filepath, JSON.stringify(config, null, 2));
+            fs.writeFileSync(filepath, JSON.stringify(config, null, 2), 'utf8');
 
             // copy hooks and install scripts
             let templates = path.join(__dirname, 'init', 'templates');

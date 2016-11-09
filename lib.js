@@ -122,6 +122,18 @@ function install_module(module_name, install_path, clone_with_ssh) {
         }
         shell.exec(cmd);
 
+        if(!global_install) {
+            var config = {};
+            if(fileExists('atomar.json')) {
+                var data = fs.readFileSync('atomar.json', 'utf8');
+                config = JSON.parse(data);
+            }
+            if(!config.dependencies) config.dependencies = {};
+            // TODO: eventually we'll support specific versions
+            config.dependencies[module_name] = "*";
+            fs.writeFileSync('atomar.json', JSON.stringify(config, null, 2), 'utf8');
+        }
+
         if(fileExists(path.join(install_path, 'composer.json'))) run_composer(install_path);
     } else {
         throw new Error('The module "' + module_name + '" does not exist.');
