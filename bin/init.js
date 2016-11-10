@@ -114,12 +114,6 @@ function init(dir) {
                     namespace: config.name,
                 });
             }
-            let installPath = path.join(dir, 'install.php');
-            if(!lib.fileExists(installPath)) {
-                lib.injectTemplate(path.join(templates, 'install.php'), installPath, {
-                    namespace: config.name,
-                });
-            }
 
             return Promise.resolve(filepath);
         })
