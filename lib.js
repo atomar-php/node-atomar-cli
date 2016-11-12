@@ -184,7 +184,11 @@ function run_composer(working_dir) {
         shell.exec(cmd);
     }
 
-    // run
+    // update
+    cmd = composer + ' update -d=' + working_dir;
+    shell.exec(cmd);
+
+    // install
     console.log('Installing dependencies');
     cmd = composer + ' install -d=' + working_dir;
     shell.exec(cmd);
