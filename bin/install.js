@@ -28,5 +28,7 @@ exports.handler = function(argv) {
                 }
             }
         }
+        // run composer on module
+        lib.run_composer('./');
     }
 };

@@ -134,7 +134,7 @@ function install_module(module_name, install_path, clone_with_ssh) {
             fs.writeFileSync('atomar.json', JSON.stringify(config, null, 2), 'utf8');
         }
 
-        if(fileExists(path.join(install_path, 'composer.json'))) run_composer(install_path);
+        run_composer(install_path);
     } else {
         throw new Error('The module "' + module_name + '" does not exist.');
     }
@@ -166,10 +166,12 @@ function modulesDir() {
  * Runs composer in the working dir.
  * If composer is not installed it will be downloaded to the working dir
  *
- * @param working_dir
+ * @param working_dir the directory where composer will be executed
  */
 function run_composer(working_dir) {
     var cmd;
+
+    if(!fileExists(path.join(working_dir, 'composer.json'))) return;
 
     // fetch composer
     var composer_installer = path.join(rootDir(), 'composer.php');
@@ -272,6 +274,7 @@ module.exports = {
     replaceInFile: replaceInFile,
     fileExists: fileExists,
     promisify: promisify,
+    run_composer: run_composer,
     machineName: machineName,
     className: className,
     get spec() { return spec }
