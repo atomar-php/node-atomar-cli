@@ -4,67 +4,67 @@
 
 var modules = {
     atomar: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar.git'
     },
     auth_token: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-auth_token.git'
     },
     captcha: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-captcha.git'
     },
     chardin_steps: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-chardin_steps.git'
     },
     tiny_cms: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-tiny_cms.git'
     },
     crypto: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-crypto.git'
     },
     debug: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-debug.git'
     },
     fancy_fields: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-fancy_fields.git'
     },
     files: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-files.git'
     },
     google_data: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-google_data.git'
     },
     image_utils: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-image_utils.git'
     },
     infinite_scroll: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-infinite_scroll.git'
     },
     js_front: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-js_front.git'
     },
     i18n: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-i18n.git'
     },
     podcast: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-podcast.git'
     },
     recaptcha: {
-        owner: 'neutrinog',
+        owner: 'atomar-php',
         repo: 'atomar-recaptcha.git'
     }
 };
