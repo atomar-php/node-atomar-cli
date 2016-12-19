@@ -1,6 +1,6 @@
 {
   "name": "atomar-cli",
-  "version": "0.26.0",
+  "version": "0.26.1",
   "atomarVersion": "1.0.0",
   "description": "A command line tool to create and deploy atomar sites",
   "main": "./atomar.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neutrinog/node-atomar-cli.git"
+    "url": "git+https://github.com/atomar-php/node-atomar-cli.git"
   },
   "keywords": [
     "atomar",
@@ -18,10 +18,10 @@
   ],
   "author": "Joel Lonbeck <joel@neutrinographics.com> (http://neutrinographics.com)",
   "bugs": {
-    "url": "https://github.com/neutrinog/node-atomar-cli.git"
+    "url": "https://github.com/atomar-php/node-atomar-cli.git"
   },
   "license": "MIT",
-  "homepage": "https://github.com/neutrinog/node-atomar-cli#readme",
+  "homepage": "https://github.com/atomar-php/node-atomar-cli#readme",
   "devDependencies": {
     "jest": "^14.1.0"
   },
