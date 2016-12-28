@@ -1,12 +1,12 @@
 'use strict';
 
-var shell = require('shelljs');
-var path = require('path');
-var fs = require('fs');
-var store = require('./module_store');
-var mkdirp = require('mkdirp');
+let shell = require('shelljs');
+let path = require('path');
+let fs = require('fs');
+let store = require('./module_store');
+let mkdirp = require('mkdirp');
 
-var spec = {
+let spec = {
     controllers_dir: 'controller',
     views_dir: 'views',
     package_file: 'atomar.json'
@@ -36,9 +36,9 @@ function machineName(string) {
  */
 function injectTemplate(source, destination, values) {
     values = values || {};
-    var data = fs.readFileSync(source, 'utf8');
-    for(var key of Object.keys(values)) {
-        var match = new RegExp('\{\{' + key + '\}\}', 'g');
+    let data = fs.readFileSync(source, 'utf8');
+    for(let key of Object.keys(values)) {
+        let match = new RegExp('\{\{' + key + '\}\}', 'g');
         data = data.replace(match, values[key]);
     }
     mkdirp(path.dirname(destination));
@@ -53,7 +53,7 @@ function injectTemplate(source, destination, values) {
  */
 function loadPackage() {
     try {
-        var data = fs.readFileSync(path.join(process.cwd(), spec.package_file));
+        let data = fs.readFileSync(path.join(process.cwd(), spec.package_file));
         return JSON.parse(data);
     } catch (err) {
         console.error(err);
@@ -82,7 +82,7 @@ function fileExists(file) {
  * @param replacement string
  */
 function replaceInFile(filePath, matcher, replacement) {
-    var data = fs.readFileSync(filePath, 'utf8');
+    let data = fs.readFileSync(filePath, 'utf8');
     data = data.replace(matcher, replacement);
     fs.writeFileSync(filePath, data, 'utf8');
 }
@@ -94,43 +94,42 @@ function replaceInFile(filePath, matcher, replacement) {
  * @param clone_with_ssh
  */
 function install_module(module_name, install_path, clone_with_ssh) {
-    var remote;
-    var module = store.lookup_module(module_name, '*');
-    var global_install = false;
+    let global_install = false;
+    let module = store.lookup_module(owner, repo, '*');
 
     if(module) {
-        if(clone_with_ssh) {
-            remote = 'git@github.com:' + module.owner + '/' + module.repo;
-        } else {
-            remote = 'https://github.com/' + module.owner + '/' + module.repo;
-        }
+        let remote = clone_with_ssh ? module.clone.ssh : module.clone.http;
         if(!install_path) {
             global_install = true;
-            install_path = path.join(modulesDir(), module_name);
+            install_path = path.join(modulesDir(), module.owner, module.slug);
         } else {
-            install_path = path.join(install_path, module_name);
+            install_path = path.join(install_path, module.owner, module.slug);
         }
 
-        var cmd;
+        let cmd;
+        if(!fileExists(install_path)) {
+            shell.exec('git clone ' + remote + ' ' + install_path;);
+        }
         if(fileExists(install_path)) {
-            console.log('Updating ' + module_name + '...');
+            console.log('Updating ' + module.slug + '...');
             cmd = 'git pull origin master';
             cmd = 'cd ' + install_path + ' && ' + cmd;
+            // fetch all
         } else {
-            console.log('Installing ' + module_name + '...');
+            console.log('Installing ' + module.slug + '...');
             cmd = 'git clone ' + remote + ' ' + install_path;
+            // fetch all
         }
         shell.exec(cmd);
 
         if(!global_install) {
-            var config = {};
+            let config = {};
             if(fileExists('atomar.json')) {
-                var data = fs.readFileSync('atomar.json', 'utf8');
+                let data = fs.readFileSync('atomar.json', 'utf8');
                 config = JSON.parse(data);
             }
             if(!config.dependencies) config.dependencies = {};
-            // TODO: eventually we'll support specific versions
-            config.dependencies[module_name] = "*";
+            config.dependencies[owner + '/' + module.slug] = "*";
             fs.writeFileSync('atomar.json', JSON.stringify(config, null, 2), 'utf8');
         }
 
@@ -146,8 +145,8 @@ function install_module(module_name, install_path, clone_with_ssh) {
  * @returns {*}
  */
 function rootDir() {
-    var home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
-    var root = path.join(home, '.atomar_cli');
+    let home = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
+    let root = path.join(home, '.atomar_cli');
     mkdirp.sync(root);
     return root;
 }
@@ -157,7 +156,7 @@ function rootDir() {
  * @returns {*}
  */
 function modulesDir() {
-    var dir = path.join(rootDir(), 'atomar_modules');
+    let dir = path.join(rootDir(), 'atomar_modules');
     mkdirp.sync(dir);
     return dir;
 }
@@ -169,13 +168,13 @@ function modulesDir() {
  * @param working_dir the directory where composer will be executed
  */
 function run_composer(working_dir) {
-    var cmd;
+    let cmd;
 
     if(!fileExists(path.join(working_dir, 'composer.json'))) return;
 
     // fetch composer
-    var composer_installer = path.join(rootDir(), 'composer.php');
-    var composer = path.join(rootDir(), 'composer.phar');
+    let composer_installer = path.join(rootDir(), 'composer.php');
+    let composer = path.join(rootDir(), 'composer.phar');
     if(!fileExists(composer)) {
         console.log('Getting composer');
         cmd = 'curl -sS https://getcomposer.org/installer -o ' + composer_installer;
@@ -200,7 +199,7 @@ function run_composer(working_dir) {
  * @returns string
  */
 function lookup_module(name) {
-    var dir = path.join(modulesDir(), name);
+    let dir = path.join(modulesDir(), name);
     try {
         if (fs.statSync(dir).isDirectory()) {
             return dir;
@@ -229,12 +228,12 @@ function lookup_module(name) {
  * @returns {function.<Promise>} a new function that returns a promise
  */
 function promisify(module, fn) {
-    var hasModule = typeof module !== 'function',
+    let hasModule = typeof module !== 'function',
         f = hasModule ? module[fn] : module,
         mod = hasModule ? module : null;
 
     return function () {
-        var args = [],
+        let args = [],
             i = arguments.length - 1;
 
         /**
