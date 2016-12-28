@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 
-var commandDir = './bin';
+let commandDir = './bin';
 
-var argv = require('yargs')
+let argv = require('yargs')
     .commandDir(commandDir)
     .help('help')
     .alias('h', 'help')

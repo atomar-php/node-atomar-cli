@@ -31,6 +31,12 @@ let shelljs = {
     exec: jest.fn(function(cmd, options, callback) {
         if(typeof callback === 'function') {
             callback(shift(codes), shift(stdouts), shift(stderrs));
+        } else {
+            return {
+                code: shift(codes),
+                stdout: shift(stdouts),
+                stderr: shift(stderrs)
+            }
         }
     })
 };

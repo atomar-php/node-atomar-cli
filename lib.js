@@ -95,7 +95,7 @@ function replaceInFile(filePath, matcher, replacement) {
  */
 function install_module(module_name, install_path, clone_with_ssh) {
     let global_install = false;
-    let module = store.lookup_module(owner, repo, '*');
+    let module = store.lookup_module(module_name, '*');
 
     if(module) {
         let remote = clone_with_ssh ? module.clone.ssh : module.clone.http;
@@ -107,21 +107,23 @@ function install_module(module_name, install_path, clone_with_ssh) {
         }
 
         let cmd;
-        if(!fileExists(install_path)) {
-            shell.exec('git clone ' + remote + ' ' + install_path;);
-        }
-        if(fileExists(install_path)) {
-            console.log('Updating ' + module.slug + '...');
-            cmd = 'git pull origin master';
-            cmd = 'cd ' + install_path + ' && ' + cmd;
-            // fetch all
-        } else {
-            console.log('Installing ' + module.slug + '...');
-            cmd = 'git clone ' + remote + ' ' + install_path;
-            // fetch all
-        }
-        shell.exec(cmd);
 
+        // install
+        if(!fileExists(install_path)) {
+            shell.exec('git clone ' + remote + ' ' + install_path);
+        }
+
+        // update
+        if(fileExists(install_path)) {
+            shell.exec('cd ' + install_path + ' && git fetch origin');
+        }
+
+        // checkout Version
+        if(module.commit) {
+            shell.exec('cd ' + install_path + ' && git checkout ' + module.commit);
+        }
+
+        // record in config
         if(!global_install) {
             let config = {};
             if(fileExists('atomar.json')) {

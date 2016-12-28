@@ -1,6 +1,7 @@
 'use strict';
 
 jest.unmock('../module_store.js');
+jest.unmock('../semver');
 
 describe('module_store', () => {
     let store, shelljs;
@@ -12,13 +13,18 @@ describe('module_store', () => {
 
     it('should look up a module', () => {
         let realfs = require.requireActual('fs');
-        let data = realfs.readFileSync('__tests__/data/valid-module-lookup.json');
-        shelljs.__queueStdout = data;
+        shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-tags-lookup.json');
 
-        return store.lookup_module('atomar-php', 'atomar')
-            .then(function(response) {
-                console.log(response);
-                // TODO: handle
-            });
+        let module = store.lookup_module('atomar', '*');
+        expect(module.version).toEqual('0.2');
+    });
+
+    it('should fail to look up a module', () => {
+        shelljs.__queueStdout = JSON.stringify({
+            message: 'Not found'
+        });
+
+        let module = store.lookup_module('atomar');
+        expect(module).toEqual(null);
     });
 });

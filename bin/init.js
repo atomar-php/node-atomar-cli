@@ -72,7 +72,7 @@ function init(dir) {
         })
         .then((answer) => {
             if(answer) config.name = answer;
-            return question('version: (' + config.version + ') ');
+            return question('Version: (' + config.version + ') ');
         })
         .then(function(answer) {
             if(answer) config.version = answer;
