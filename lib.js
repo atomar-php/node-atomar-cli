@@ -106,8 +106,6 @@ function install_module(module_name, install_path, clone_with_ssh) {
             install_path = path.join(install_path, module.owner, module.slug);
         }
 
-        let cmd;
-
         // install
         if(!fileExists(install_path)) {
             shell.exec('git clone ' + remote + ' ' + install_path);
@@ -131,7 +129,7 @@ function install_module(module_name, install_path, clone_with_ssh) {
                 config = JSON.parse(data);
             }
             if(!config.dependencies) config.dependencies = {};
-            config.dependencies[owner + '/' + module.slug] = "*";
+            config.dependencies[module.owner + '/' + module.slug] = module.version;
             fs.writeFileSync('atomar.json', JSON.stringify(config, null, 2), 'utf8');
         }
 
