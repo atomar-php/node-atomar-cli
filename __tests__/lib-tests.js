@@ -1,18 +1,15 @@
 'use strict';
 
 jest.unmock('../lib.js');
-jest.unmock('rimraf');
 jest.unmock('path');
 jest.mock('fs');
 
 describe('lib', () => {
-    var lib, modstore;
+    let lib, modstore;
 
     beforeEach(() => {
         lib = require('../lib');
         modstore = require('../module_store');
-        var rimraf = require('rimraf');
-        rimraf.sync('out');
     });
 
     describe('Install', () => {
@@ -26,8 +23,18 @@ describe('lib', () => {
                     http: 'https://github.com/atomar-php/atomar'
                 }
             };
-            lib.install_module('files', 'out/files', false);
-            expect(lib.fileExists('out/files')).toBeTruthy();
+            lib.install_module('atomar', 'out/files', false);
+            expect(lib.fileExists('atomar.json')).toBeTruthy();
+        });
+
+        it('should fail to clone a module', () => {
+            modstore.__queueModules = null;
+            try {
+                lib.install_module('atomar', 'out/files', false);
+                expect(lib.fileExists('atomar.json')).not.toBeTruthy();
+            } catch (err) {
+                expect(err.message).toEqual('The module "atomar" does not exist.');
+            }
         });
     });
 });
