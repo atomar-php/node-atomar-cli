@@ -35,6 +35,7 @@ function init(dir) {
     let config = {
         name: lib.machineName(path.basename(path.dirname(filepath))),
         version: '1.0.0',
+        atomar_version: lib.spec.atomar_version,
         description: ''
     };
     const rl = readline.createInterface({

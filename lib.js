@@ -5,11 +5,14 @@ let path = require('path');
 let fs = require('fs');
 let store = require('./module_store');
 let mkdirp = require('mkdirp');
+let semver = require('./semver');
 
 let spec = {
     controllers_dir: 'controller',
     views_dir: 'views',
-    package_file: 'atomar.json'
+    package_file: 'atomar.json',
+    // TODO: it would be great if we could pull this value from the web and notify users if there is an update
+    atomar_version: '0.2.0'
 };
 
 /**
@@ -98,6 +101,8 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
     let global_install = false;
     let module = store.lookup_module(module_name, version);
     if(module) {
+        console.log('Found ' + module.slug + ':' + module.version);
+
         let remote = clone_with_ssh ? module.clone.ssh : module.clone.http;
         if(!install_path) {
             global_install = true;
@@ -126,16 +131,36 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
         // record in config
         if(!global_install) {
             let config = {};
-            if(fileExists('atomar.json')) {
-                let data = fs.readFileSync('atomar.json', 'utf8');
+            if(fileExists(spec.package_file)) {
+                let data = fs.readFileSync(spec.package_file, 'utf8');
                 config = JSON.parse(data);
             }
             if(!config.dependencies) config.dependencies = {};
             config.dependencies[module.owner + '/' + module.slug] = module.version;
-            fs.writeFileSync('atomar.json', JSON.stringify(config, null, 2), 'utf8');
+            fs.writeFileSync(spec.package_file, JSON.stringify(config, null, 2), 'utf8');
         }
 
         run_composer(install_path);
+
+        // validate module config
+        let module_config = path.join(install_path, spec.package_file);
+        if(fileExists(module_config)) {
+            let data = fs.readFileSync(module_config, 'utf8');
+            try {
+                let config = JSON.parse(data);
+                let compare = semver(config.version, spec.atomar_version);
+                if(compare === -1) {
+                    console.warn('WARING: This module supports an old version of Atomar');
+                } else if(compare === 1) {
+                    console.warn('WARING: This module supports a newer version of Atomar');
+                }
+            } catch (err) {
+                console.warn('WARING: This module\'s ' + spec.package_file + ' file appears to be corrupt');
+                console.error(err);
+            }
+        } else {
+            console.warn('WARING: This does not appear to be an atomar module');
+        }
     } else {
         throw new Error('That version of "' + module_name + '" does not exist.');
     }
