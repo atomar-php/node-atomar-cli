@@ -90,20 +90,20 @@ function replaceInFile(filePath, matcher, replacement) {
 /**
  * Installs an atomar module
  * @param module_name
+ * @param version
  * @param install_path if left null the module will be installed globally
  * @param clone_with_ssh
  */
-function install_module(module_name, install_path, clone_with_ssh) {
+function install_module(module_name, version, install_path, clone_with_ssh) {
     let global_install = false;
-    let module = store.lookup_module(module_name, '*');
-
+    let module = store.lookup_module(module_name, version);
     if(module) {
         let remote = clone_with_ssh ? module.clone.ssh : module.clone.http;
         if(!install_path) {
             global_install = true;
-            install_path = path.join(modulesDir(), module.owner, module.slug);
+            install_path = path.join(modulesDir(), module.slug);
         } else {
-            install_path = path.join(install_path, module.owner, module.slug);
+            install_path = path.join(install_path, module.slug);
         }
 
         // install
@@ -121,6 +121,8 @@ function install_module(module_name, install_path, clone_with_ssh) {
             shell.exec('cd ' + install_path + ' && git checkout ' + module.commit);
         }
 
+        console.log(module.slug + ' installed to ' + install_path);
+
         // record in config
         if(!global_install) {
             let config = {};
@@ -135,7 +137,7 @@ function install_module(module_name, install_path, clone_with_ssh) {
 
         run_composer(install_path);
     } else {
-        throw new Error('The module "' + module_name + '" does not exist.');
+        throw new Error('That version of "' + module_name + '" does not exist.');
     }
 }
 

@@ -8,7 +8,8 @@ const semver = require('./semver');
  * @return {Promise}
  */
 function lookup_github(name, version) {
-    if(typeof version == 'undefined') version = '*';
+    if(typeof version === 'undefined') version = '*';
+    if(typeof version === 'number')  version += ''; // convert to string
     let fullname = name.split('/');
     if(fullname.length > 2 || fullname.length == 0) return Promise.reject('Invalid module name: "' + fullname + '"');
 
@@ -27,15 +28,18 @@ function lookup_github(name, version) {
     if(tags.message) return null;
 
     let tag = null;
-    if(typeof version === 'string') {
+    if(version !== '*') {
+        // find exact version
         for(let i = 0; i < tags.length; i ++) {
             if(semver(tags[i].name, version) === 0) {
                 tag = tags[i];
                 break;
             }
         }
+        if(tag == null) return null;
     } else {
-        tag = tag[0];
+        // get most recent version
+        tag = tags[0];
     }
 
 
