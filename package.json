@@ -29,7 +29,6 @@
     "atomar": "atomar.js"
   },
   "dependencies": {
-    "compare-versions": "^3.0.0",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.5.4",
     "shelljs": "^0.7.3",
