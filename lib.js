@@ -54,6 +54,8 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
     if(module.tag) {
         console.log('\nChecking out ' + module.tag.name + '...');
         shell.exec('cd ' + install_path + ' && git checkout ' + module.tag.name);
+    } else {
+        shell.exec('cd ' + install_path + ' && git checkout master');
     }
 
     console.log(module.slug + ' installed to ' + install_path);
