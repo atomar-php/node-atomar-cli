@@ -4,7 +4,6 @@ let shell = require('shelljs');
 let path = require('path');
 let fs = require('fs');
 let store = require('./module_store');
-let mkdirp = require('mkdirp');
 let tools = require('./tools');
 let atomar_config = require('./config');
 let semver = require('./semver');

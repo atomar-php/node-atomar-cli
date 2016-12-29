@@ -33,7 +33,7 @@ function injectTemplate(source, destination, values) {
         let match = new RegExp('\{\{' + key + '\}\}', 'g');
         data = data.replace(match, values[key]);
     }
-    mkdirp(path.dirname(destination));
+    mkdirp.sync(path.dirname(destination));
     if(fileExists(destination)) throw new Error('The path already exists', destination);
     fs.writeFileSync(destination, data, 'utf8');
 }

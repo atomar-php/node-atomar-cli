@@ -58,7 +58,7 @@ exports.handler = function(argv) {
 
     console.log('Deploying "' + info.name + '" to ' + deploy_path);
     let templates = path.join(__dirname, 'deploy', 'templates');
-    mkdirp(deploy_path);
+    mkdirp.sync(deploy_path);
     tools.injectTemplate(path.join(templates, 'index.php'), indexPath, {
         atomar_path: path.resolve(path.join(atomar_path, 'Atomar.php'))
     });
