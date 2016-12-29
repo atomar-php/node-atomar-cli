@@ -31,19 +31,22 @@ exports.handler = function(argv) {
         // install dependencies
         let config = atomar_config.loadPackage();
         if(config !== null) {
-            if(config.dependencies && config.dependencies.length > 0) {
-                for(let module in dependencies) {
-                    if(dependencies.hasOwnProperty(module)) {
-                        lib.install_module(module, dependencies[module], 'atomar_modules', argv.ssh);
+            if(config.dependencies && Object.keys(config.dependencies).length > 0) {
+                for(let module in config.dependencies) {
+                    if(config.dependencies.hasOwnProperty(module)) {
+                        lib.install_module(module, config.dependencies[module], 'atomar_modules', argv.ssh);
                     }
                 }
             } else {
-                console.warn(config.name + ' has no dependencies');
+                console.warn(config.name + ' has no dependencies.');
             }
         } else {
             console.warn('Not an Atomar module');
         }
-        // run composer on module
-        lib.run_composer('./');
+        // run composer on module in current directory
+        if(lib.has_composer('./')) {
+            console.log('\nUpdating composer dependencies for ' + config.name);
+            lib.run_composer('./');
+        }
     }
 };

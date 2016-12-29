@@ -29,7 +29,9 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
 
     let module = store.lookup_module(module_name, version);
 
-    console.log('Found ' + module.slug + ':' + module.version);
+    console.log('#####################');
+    console.log('# Found ' + module.slug + ':' + module.version);
+    console.log('#####################');
 
     let remote = clone_with_ssh ? module.clone.ssh : module.clone.http;
     if(!install_path) {
@@ -37,29 +39,27 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
     } else {
         install_path = path.join(install_path, module.slug);
     }
-
+    
     // install
     if(!tools.fileExists(install_path)) {
-        console.log('\nInstalling...');
+        console.log('\n- Installing ' + module.slug + ' to ' + install_path + '...');
         shell.exec('git clone ' + remote + ' ' + install_path);
     }
 
     // update
     if(tools.fileExists(install_path)) {
-        console.log('\nUpdating...');
+        console.log('\n- Updating ' + module.slug + '...');
         shell.exec('cd ' + install_path + ' && git fetch origin');
     }
 
     // checkout Version
     if(module.tag) {
-        console.log('\nChecking out ' + module.tag.name + '...');
+        console.log('\n- Checking out ' + module.tag.name + '...');
         shell.exec('cd ' + install_path + ' && git checkout ' + module.tag.name);
     } else {
-        console.warn('\nWARNING: No versions available so tracking master.');
+        console.warn('\n- WARNING: No versions available so tracking master.');
         shell.exec('cd ' + install_path + ' && git checkout master');
     }
-
-    console.log(module.slug + ' installed to ' + install_path);
 
     // record in config
     if(!global_install) {
@@ -79,20 +79,29 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
             let config = JSON.parse(data);
             let compare = semver(config.version, atomar_config.atomar_version);
             if(compare === -1) {
-                console.warn('WARING: This module supports an older version of Atomar');
+                console.warn('- WARING: This module supports an older version of Atomar.');
             } else if(compare === 1) {
-                console.warn('WARING: This module supports a newer version of Atomar');
+                console.warn('- WARING: This module supports a newer version of Atomar.');
             }
         } catch (err) {
-            console.warn('WARING: This module\'s ' + atomar_config.package_file + ' file appears to be corrupt');
+            console.warn('\n- WARING: This module\'s ' + atomar_config.package_file + ' file appears to be corrupt.');
             console.error(err);
         }
     } else {
-        console.warn('WARING: This does not appear to be an atomar module');
+        console.warn('\n- WARING: This does not appear to be an atomar module.');
     }
 
-    console.log('Done.');
+    console.log('\n- Finished installing ' + module.slug + '.\n');
     return true;
+}
+
+/**
+ * Checks if a composer config file exists in the given directory
+ * @param working_dir the directory where the composer config file may exist
+ * @return boolean 
+ */
+function has_composer(working_dir) {
+    return tools.fileExists(path.join(working_dir, 'composer.json'));
 }
 
 /**
@@ -104,26 +113,27 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
 function run_composer(working_dir) {
     let cmd;
 
-    if(!tools.fileExists(path.join(working_dir, 'composer.json'))) return;
+    if(!has_composer(working_dir)) return;
 
     // fetch composer
     let composer_installer = path.join(atomar_config.cache_dir, 'composer.php');
     let composer = path.join(atomar_config.cache_dir, 'composer.phar');
     if(!tools.fileExists(composer)) {
-        console.log('\nInstalling composer...');
+        console.log('\n- Installing composer...');
         cmd = 'curl -sS https://getcomposer.org/installer -o ' + composer_installer;
         cmd += ' && php ' + composer_installer + ' --install-dir=' + atomar_config.cache_dir;
         cmd += ' && rm ' + composer_installer;
         shell.exec(cmd);
     }
 
+    // TODO: we probably shouldn't do this because users can't depend on their set versions.
     // update
-    console.log('\nUpdating dependencies...');
+    console.log('\n- Composer: Updating...');
     cmd = composer + ' update -d=' + working_dir;
     shell.exec(cmd);
 
     // install
-    console.log('\nInstalling composer...');
+    console.log('\n- Composer: Installing...');
     cmd = composer + ' install -d=' + working_dir;
     shell.exec(cmd);
 }
@@ -149,5 +159,6 @@ module.exports = {
     lookup_module: lookup_module,
     install_module: install_module,
     run_composer: run_composer,
+    has_composer: run_composer,
     config: atomar_config
 };
