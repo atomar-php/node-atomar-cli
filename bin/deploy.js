@@ -7,7 +7,6 @@ const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
 const tools = require('../tools');
 const atomar_config = require('../config');
-
 const atomar_path = lib.lookup_module('atomar');
 
 exports.command = 'deploy <deploy_path>';

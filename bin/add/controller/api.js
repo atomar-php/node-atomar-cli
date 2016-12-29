@@ -13,6 +13,10 @@ exports.builder = {
 
 };
 exports.handler = function(argv) {
+    let info = atomar_config.loadPackage();
+    if(!info) throw new Error('Not an Aomar module. Try running inside a module.');
+    argv.name = argv.name.replace(/\.php$/i, '');
+
     let className = tools.className(argv.name);
     let destFile = path.join(process.cwd(), atomar_config.controllers_dir, className + '.php');
     mkdirp.sync(path.dirname(destFile));
@@ -20,10 +24,6 @@ exports.handler = function(argv) {
         console.error('The path already exists', destFile);
         return;
     }
-
-    let info = atomar_config.loadPackage();
-    if(!info) throw new Error('Not an atomar module. Try running inside a module.');
-
 
     let templates = path.join(__dirname, 'templates');
     tools.injectTemplate(path.join(templates, 'api.php'), destFile, {
