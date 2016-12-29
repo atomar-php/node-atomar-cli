@@ -33,7 +33,7 @@ let settings = {
 // load config
 let config_path = path.join(settings.cache_dir, 'config.json');
 if(tools.fileExists(config_path)) {
-    let data = fs.readFileSync(module_config, 'utf8');
+    let data = fs.readFileSync(config_path, 'utf8');
     try {
         let config = JSON.parse(data);
         if(typeof config.repo_owner !== 'undefined') settings.repo_owner = config.repo_owner;

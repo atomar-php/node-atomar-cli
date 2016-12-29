@@ -22,6 +22,9 @@ exports.builder = {
     }
 };
 exports.handler = function(argv) {
+    if(argv.ssh) {
+        console.log('\nUsing SSH...');
+    }
     if(argv.module) {
         lib.install_module(argv.module, argv.v, argv.g ? null : 'atomar_modules', argv.ssh);
     } else {
