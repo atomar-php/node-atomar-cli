@@ -31,16 +31,24 @@ describe('module_store', () => {
         let realfs = require.requireActual('fs');
         shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-tags-lookup.json');
 
-        let module = store.lookup_module('atomar', '3.0');
-        expect(module).toEqual(null);
+        try {
+            let module = store.lookup_module('atomar', '3.0');
+            expect(module).toEqual(null);
+        } catch(err) {
+            expect(err.message).toEqual('That version of the module does not exist');
+        }
     });
 
     it('should support integer version numbers', () => {
         let realfs = require.requireActual('fs');
         shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-tags-lookup.json');
 
-        let module = store.lookup_module('atomar', 3);
-        expect(module).toEqual(null);
+        try {
+            let module = store.lookup_module('atomar', 3);
+            expect(module).toEqual(null);
+        } catch(err) {
+            expect(err.message).toEqual('That version of the module does not exist');
+        }
     });
 
     it('should fail to look up a module', () => {
@@ -48,7 +56,11 @@ describe('module_store', () => {
             message: 'Not found'
         });
 
-        let module = store.lookup_module('atomar');
-        expect(module).toEqual(null);
+        try {
+            let module = store.lookup_module('atomar');
+            expect(module).toEqual(null);
+        } catch(err) {
+            expect(err.message).toEqual('The module could not be found');
+        }
     });
 });

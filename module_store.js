@@ -11,7 +11,7 @@ function lookup_github(name, version) {
     if(typeof version === 'undefined') version = '*';
     if(typeof version === 'number')  version += ''; // convert to string
     let fullname = name.split('/');
-    if(fullname.length > 2 || fullname.length == 0) return Promise.reject('Invalid module name: "' + fullname + '"');
+    if(fullname.length > 2 || fullname.length == 0) throw new Error('Invalid module name: "' + fullname + '"');
 
     // default to atomar-php owner
     if(fullname.length == 1) fullname.unshift('atomar-php');
@@ -25,7 +25,7 @@ function lookup_github(name, version) {
     let tags = curl(tags_url);
 
     // repo does not exist
-    if(tags.message) return null;
+    if(tags.message) throw new Error('The module could not be found');
 
     let tag = null;
     if(version !== '*') {
@@ -36,12 +36,11 @@ function lookup_github(name, version) {
                 break;
             }
         }
-        if(tag == null) return null;
+        if(tag == null) throw new Error('That version of the module does not exist');
     } else {
         // get most recent version
         tag = tags[0];
     }
-
 
     return {
         commit: tag ? tag.commit.sha : null,
