@@ -11,7 +11,7 @@ function lookup_github(name, version) {
     if(typeof version === 'undefined') version = '*';
     if(typeof version === 'number')  version += ''; // convert to string
     let fullname = name.split('/');
-    if(fullname.length > 2 || fullname.length == 0) throw new Error('Invalid module name: "' + fullname + '"');
+    if(fullname.length > 2 || fullname.length == 0) throw new Error('Invalid module name: "' + name + '"');
 
     // default to atomar-php owner
     if(fullname.length == 1) fullname.unshift('atomar-php');
