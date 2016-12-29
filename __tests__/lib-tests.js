@@ -1,14 +1,18 @@
 'use strict';
 
 jest.unmock('../lib.js');
+jest.unmock('../tools.js');
+jest.unmock('../config.js');
+jest.unmock('mkdirp');
 jest.unmock('path');
 jest.mock('fs');
 
 describe('lib', () => {
-    let lib, modstore;
+    let lib, modstore, tools;
 
     beforeEach(() => {
         lib = require('../lib');
+        tools = require('../tools');
         modstore = require('../module_store');
     });
 
@@ -24,7 +28,7 @@ describe('lib', () => {
                 }
             };
             lib.install_module('atomar', '*', 'out/files', false);
-            expect(lib.fileExists('atomar.json')).toBeTruthy();
+            expect(tools.fileExists('atomar.json')).toBeTruthy();
         });
     });
 });

@@ -13,3 +13,16 @@ See the help for a list of commands and how to use them
 ```
 atomar --help
 ```
+
+##Customize
+You can customize this tool by adding the file `~/.atomar_cli/config.json`
+
+Example:
+
+```json
+{
+  "repo_owner":"atomar-php",
+  "use_ssh": true
+}
+
+```

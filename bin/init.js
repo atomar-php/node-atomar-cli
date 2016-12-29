@@ -5,6 +5,8 @@ const fs = require('fs');
 const lib = require('../lib');
 const mkdirp = require('mkdirp');
 const readline = require('readline');
+const tools = require('../tools');
+const atomar_config = require('../config');
 
 exports.command = 'init';
 exports.describe = 'Initializes a new Atomar module.';
@@ -28,14 +30,14 @@ exports.cmd = init;
  * @returns {Promise.<string>} the path to the atomar.json file
  */
 function init(dir) {
-    let filepath = path.join(dir, lib.spec.package_file);
-    if(lib.fileExists(filepath)) {
+    let filepath = path.join(dir, atomar_config.package_file);
+    if(tools.fileExists(filepath)) {
         return Promise.reject(new Error(path.resolve(dir) + ' has already been initialized.'));
     }
     let config = {
-        name: lib.machineName(path.basename(path.dirname(filepath))),
+        name: tools.machineName(path.basename(path.dirname(filepath))),
         version: '1.0.0',
-        atomar_version: lib.spec.atomar_version,
+        atomar_version: atomar_config.atomar_version,
         description: ''
     };
     const rl = readline.createInterface({
@@ -60,10 +62,10 @@ function init(dir) {
         });
     };
 
-    console.log('This utility will walk you through creating an ' + lib.spec.package_file + ' file.\n');
+    console.log('This utility will walk you through creating an ' + atomar_config.package_file + ' file.\n');
     return question('name: (' + config.name + ') ', function(answer) {
             if(answer) {
-                let safe_name = lib.machineName(answer);
+                let safe_name = tools.machineName(answer);
                 if (safe_name !== answer) {
                     console.log('Sorry, name can only contain alphanumeric characters and underscores. And must begin with a letter.');
                     return false;
@@ -110,8 +112,8 @@ function init(dir) {
             // copy hooks and install scripts
             let templates = path.join(__dirname, 'init', 'templates');
             let hooksPath = path.join(dir, 'Hooks.php');
-            if(!lib.fileExists(hooksPath)) {
-                lib.injectTemplate(path.join(templates, 'Hooks.php'), hooksPath, {
+            if(!tools.fileExists(hooksPath)) {
+                tools.injectTemplate(path.join(templates, 'Hooks.php'), hooksPath, {
                     namespace: config.name,
                 });
             }

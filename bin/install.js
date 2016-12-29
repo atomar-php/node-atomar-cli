@@ -1,5 +1,7 @@
 let fs = require('fs');
 let lib = require('../lib');
+let tools = require('../tools');
+let atomar_config = require('../config');
 
 exports.command = 'install [module]';
 exports.describe = 'Installs an atomar module or installs all the dependencies found an atomar.json file';
@@ -15,7 +17,7 @@ exports.builder = {
         default: '*'
     },
     ssh: {
-        default: false,
+        default: atomar_config.use_ssh,
         description: 'clone via ssh'
     }
 };
@@ -24,7 +26,7 @@ exports.handler = function(argv) {
         lib.install_module(argv.module, argv.v, argv.g ? null : 'atomar_modules', argv.ssh);
     } else {
         // install dependencies
-        if(lib.fileExists('atomar.json')) {
+        if(tools.fileExists('atomar.json')) {
             let data = fs.readFileSync('atomar.json', 'utf8');
             let dependencies = JSON.parse(data).dependencies;
             if(dependencies) {

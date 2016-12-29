@@ -1,6 +1,7 @@
 'use strict';
 
 let shell = require('shelljs');
+let atomar_config = require('./config');
 const semver = require('./semver');
 
 /**
@@ -14,11 +15,11 @@ function lookup_github(name, version) {
     if(fullname.length > 2 || fullname.length == 0) throw new Error('Invalid module name: "' + name + '"');
 
     // default to atomar-php owner
-    if(fullname.length == 1) fullname.unshift('atomar-php');
+    if(fullname.length == 1) fullname.unshift(atomar_config.repo_owner);
 
     let owner = fullname[0];
     let module_slug = fullname[1].replace(/^atomar\-/, '');
-    let repo = /^atomar/.test(module_slug) ? module_slug : 'atomar-' + module_slug;
+    let repo = /^atomar/.test(module_slug) ? module_slug : atomar_config.repo_prefix + module_slug;
 
 
     let tags_url = 'https://api.github.com/repos/' + owner + '/' + repo + '/tags';

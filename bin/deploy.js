@@ -5,6 +5,8 @@ var crypto = require('crypto');
 var lib = require('../lib');
 var rimraf = require('rimraf');
 var mkdirp = require('mkdirp');
+const tools = require('../tools');
+const atomar_config = require('../config');
 
 var atomar_path = lib.lookup_module('atomar');
 
@@ -51,22 +53,22 @@ exports.handler = function(argv) {
         rimraf.sync(indexPath);
     }
 
-    if(lib.fileExists(configPath)) {
+    if(tools.fileExists(configPath)) {
         throw new Error('A deployment already exists at ' + deploy_path + '. Use -f to overwrite');
     }
 
     console.log('Deploying "' + info.name + '" to ' + deploy_path);
     let templates = path.join(__dirname, 'deploy', 'templates');
     mkdirp(deploy_path);
-    lib.injectTemplate(path.join(templates, 'index.php'), indexPath, {
+    tools.injectTemplate(path.join(templates, 'index.php'), indexPath, {
         atomar_path: path.resolve(path.join(atomar_path, 'Atomar.php'))
     });
-    lib.injectTemplate(path.join(templates, 'config.json'), configPath, {
+    tools.injectTemplate(path.join(templates, 'config.json'), configPath, {
         namespace: info.name,
         cron_token: crypto.randomBytes(20).toString('hex'),
         app_dir: app_path,
 
     });
-    lib.injectTemplate(path.join(templates, '.htaccess'), htaccessPath);
+    tools.injectTemplate(path.join(templates, '.htaccess'), htaccessPath);
     shell.exec('chmod 644 ' + htaccessPath);
 };

@@ -2,6 +2,9 @@
 
 jest.unmock('../module_store.js');
 jest.unmock('../semver');
+jest.unmock('../tools.js');
+jest.unmock('../config.js');
+jest.unmock('mkdirp');
 
 describe('module_store', () => {
     let store, shelljs;
