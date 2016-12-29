@@ -17,7 +17,7 @@ let semver = require('./semver');
  * @param clone_with_ssh
  */
 function install_module(module_name, version, install_path, clone_with_ssh) {
-    let global_install = typeof install_path === 'undefined';
+    let global_install = install_path === null;
     if(!global_install) {
         // validate module package exists
         let module_config = atomar_config.loadPackage();

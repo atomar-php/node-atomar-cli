@@ -2,6 +2,9 @@
 
 let shelljs = require('shelljs');
 
+let info = require('./package');
+console.log('Atomar CLI v' + info.version);
+
 if(!shelljs.which('git')) {
     console.error('Sorry, this script requires git');
     return;
