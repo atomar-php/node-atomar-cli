@@ -15,14 +15,16 @@ atomar --help
 ```
 
 ##Customize
-You can customize this tool by adding the file `~/.atomar_cli/config.json`
+You can customize this tool by adding the file `~/.atomar/config.json`
 
-Example:
+Default Values:
 
 ```json
 {
   "repo_owner":"atomar-php",
+  "repo_prefix": "atomar-",
   "use_ssh": true
 }
-
 ```
+
+> NOTE: the `repo_prefix` applies to all repositories except if the repo name is `atomar`
