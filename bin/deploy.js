@@ -42,7 +42,7 @@ exports.handler = function(argv) {
     }
 
     let configPath = path.join(deploy_path, 'config.json');
-    let htaccessPath = path.join(deploy_path, '.htaccess.json');
+    let htaccessPath = path.join(deploy_path, '.htaccess');
     let indexPath = path.join(deploy_path, 'index.php');
 
     // clean up existing deployment
