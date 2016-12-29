@@ -26,16 +26,19 @@ exports.handler = function(argv) {
         lib.install_module(argv.module, argv.v, argv.g ? null : 'atomar_modules', argv.ssh);
     } else {
         // install dependencies
-        if(tools.fileExists('atomar.json')) {
-            let data = fs.readFileSync('atomar.json', 'utf8');
-            let dependencies = JSON.parse(data).dependencies;
-            if(dependencies) {
+        let config = lib.loadPackage();
+        if(config !== null) {
+            if(config.dependencies && config.dependencies.length > 0) {
                 for(let module in dependencies) {
                     if(dependencies.hasOwnProperty(module)) {
                         lib.install_module(module, dependencies[module], 'atomar_modules', argv.ssh);
                     }
                 }
+            } else {
+                console.warn(config.name + ' has no dependencies');
             }
+        } else {
+            console.warn('Not an Atomar module');
         }
         // run composer on module
         lib.run_composer('./');

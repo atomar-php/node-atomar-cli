@@ -45,6 +45,26 @@ if(tools.fileExists(config_path)) {
     }
 }
 
+/**
+ * Loads the package in the current dir
+ *
+ * @returns {{}|null} null if the package does not exist
+ */
+settings.loadPackage = function loadPackage() {
+    let data = null;
+    try {
+        data = fs.readFileSync(path.join(process.cwd(), settings.package_file));
+    } catch (err) {}
+    if(data != null) {
+        try {
+            data = JSON.parse(data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    return data;
+};
+
 // create directories
 mkdirp.sync(settings.modules_dir);
 mkdirp.sync(settings.cache_dir);

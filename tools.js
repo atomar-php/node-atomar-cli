@@ -2,6 +2,7 @@
 
 let fs = require('fs');
 let path = require('path');
+let mkdirp = require('mkdirp');
 
 /**
  * Converts a string into a class name

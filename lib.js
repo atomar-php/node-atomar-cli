@@ -10,21 +10,6 @@ let atomar_config = require('./config');
 let semver = require('./semver');
 
 /**
- * Loads the package in the current dir
- *
- * @returns {{}|null} null if the package does not exist
- */
-function loadPackage() {
-    try {
-        let data = fs.readFileSync(path.join(process.cwd(), atomar_config.package_file));
-        return JSON.parse(data);
-    } catch (err) {
-        console.error(err);
-    }
-    return null;
-}
-
-/**
  * Installs an atomar module
  * @param module_name
  * @param version
@@ -32,14 +17,22 @@ function loadPackage() {
  * @param clone_with_ssh
  */
 function install_module(module_name, version, install_path, clone_with_ssh) {
-    let global_install = false;
+    let global_install = typeof install_path === 'undefined';
+    if(!global_install) {
+        // validate module package exists
+        let module_config = atomar_config.loadPackage();
+        if(module_config === null) {
+            console.error('Not an Atomar module');
+            return;
+        }
+    }
+
     let module = store.lookup_module(module_name, version);
 
     console.log('Found ' + module.slug + ':' + module.version);
 
     let remote = clone_with_ssh ? module.clone.ssh : module.clone.http;
     if(!install_path) {
-        global_install = true;
         install_path = path.join(atomar_config.modules_dir, module.slug);
     } else {
         install_path = path.join(install_path, module.slug);
@@ -64,22 +57,18 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
 
     // record in config
     if(!global_install) {
-        let config = {};
-        if(tools.fileExists(atomar_config.package_file)) {
-            let data = fs.readFileSync(atomar_config.package_file, 'utf8');
-            config = JSON.parse(data);
-        }
-        if(!config.dependencies) config.dependencies = {};
-        config.dependencies[module.owner + '/' + module.slug] = module.version;
-        fs.writeFileSync(atomar_config.package_file, JSON.stringify(config, null, 2), 'utf8');
+        let module_config = atomar_config.loadPackage();
+        if(!module_config.dependencies) module_config.dependencies = {};
+        module_config.dependencies[module.owner + '/' + module.slug] = module.version;
+        fs.writeFileSync(atomar_config.package_file, JSON.stringify(module_config, null, 2), 'utf8');
     }
 
     run_composer(install_path);
 
     // validate module config
-    let module_config = path.join(install_path, atomar_config.package_file);
-    if(tools.fileExists(module_config)) {
-        let data = fs.readFileSync(module_config, 'utf8');
+    let sub_module_config = path.join(install_path, atomar_config.package_file);
+    if(tools.fileExists(sub_module_config)) {
+        let data = fs.readFileSync(sub_module_config, 'utf8');
         try {
             let config = JSON.parse(data);
             let compare = semver(config.version, atomar_config.atomar_version);
@@ -95,6 +84,8 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
     } else {
         console.warn('WARING: This does not appear to be an atomar module');
     }
+
+    console.log('Done.');
 }
 
 /**
@@ -145,7 +136,8 @@ function lookup_module(name) {
 }
 
 module.exports = {
-    loadPackage: loadPackage,
+    // TODO: this is deprecated
+    loadPackage: atomar_config.loadPackage,
     lookup_module: lookup_module,
     install_module: install_module,
     run_composer: run_composer,
