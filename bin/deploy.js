@@ -1,14 +1,14 @@
-var shell = require('shelljs');
-var fs = require('fs');
-var path = require('path');
-var crypto = require('crypto');
-var lib = require('../lib');
-var rimraf = require('rimraf');
-var mkdirp = require('mkdirp');
+const shell = require('shelljs');
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const lib = require('../lib');
+const rimraf = require('rimraf');
+const mkdirp = require('mkdirp');
 const tools = require('../tools');
 const atomar_config = require('../config');
 
-var atomar_path = lib.lookup_module('atomar');
+const atomar_path = lib.lookup_module('atomar');
 
 exports.command = 'deploy <deploy_path>';
 exports.describe = 'Deploys an atomar application to run on an atomar instance';
@@ -30,11 +30,11 @@ exports.builder = {
     }
 };
 exports.handler = function(argv) {
-    var deploy_path = path.resolve(argv.deploy_path);
-    var app_path = path.resolve(argv.app_path);
-    var atomar_path = path.resolve(argv.atomar_path);
+    let deploy_path = path.resolve(argv.deploy_path);
+    let app_path = path.resolve(argv.app_path);
+    let atomar_path = path.resolve(argv.atomar_path);
 
-    var info = lib.loadPackage();
+    let info = atomar_config.loadPackage();
     if(!info) throw new Error('Not an atomar module. Try running inside a module or use --app.');
 
     // validate atomar installation

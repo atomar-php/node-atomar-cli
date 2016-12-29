@@ -1,9 +1,10 @@
 'use strict';
 
-var path = require('path');
-var lib = require('../../../lib');
-var mkdirp = require('mkdirp');
-var fs = require('fs');
+const path = require('path');
+const mkdirp = require('mkdirp');
+const tools = require('../../../tools');
+const atomar_config = require('../../../config');
+const fs = require('fs');
 
 exports.command = 'lightbox <name>';
 exports.describe = 'Creates a lightbox controller';
@@ -11,29 +12,29 @@ exports.builder = {
 
 };
 exports.handler = function(argv) {
-    var className = lib.className(argv.name);
-    var destFile = path.join(process.cwd(), lib.spec.controllers_dir, className + '.php');
+    let className = tools.className(argv.name);
+    let destFile = path.join(process.cwd(), atomar_config.controllers_dir, className + '.php');
     mkdirp.sync(path.dirname(destFile));
-    if(lib.fileExists(destFile)) {
+    if(tools.fileExists(destFile)) {
         console.error('The path already exists', destFile);
         return;
     }
 
-    var info = lib.loadPackage();
+    let info = atomar_config.loadPackage();
     if(!info) throw new Error('Not an atomar module. Try running inside a module.');
 
 
-    var templates = path.join(__dirname, 'templates');
-    lib.injectTemplate(path.join(templates, 'lightbox.php'), destFile, {
+    let templates = path.join(__dirname, 'templates');
+    tools.injectTemplate(path.join(templates, 'lightbox.php'), destFile, {
         namespace: info.name + '\\controller',
         name: className,
         module_id: info.name,
         html_view: className.toLowerCase()
     });
-    var viewFile = path.join(process.cwd(), lib.spec.views_dir, 'lightbox.' + className.toLowerCase() + '.html');
+    let viewFile = path.join(process.cwd(), atomar_config.views_dir, 'lightbox.' + className.toLowerCase() + '.html');
     mkdirp.sync(path.dirname(viewFile));
-    if(!lib.fileExists(viewFile)) {
-        lib.injectTemplate(path.join(templates, 'lightbox.html'), viewFile);
+    if(!tools.fileExists(viewFile)) {
+        tools.injectTemplate(path.join(templates, 'lightbox.html'), viewFile);
     }
 
     // TODO: ask to build the route if one does not exist

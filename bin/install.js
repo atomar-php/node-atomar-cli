@@ -26,7 +26,7 @@ exports.handler = function(argv) {
         lib.install_module(argv.module, argv.v, argv.g ? null : 'atomar_modules', argv.ssh);
     } else {
         // install dependencies
-        let config = lib.loadPackage();
+        let config = atomar_config.loadPackage();
         if(config !== null) {
             if(config.dependencies && config.dependencies.length > 0) {
                 for(let module in dependencies) {

@@ -2,7 +2,7 @@
 
 const path = require('path');
 const fs = require('fs');
-const lib = require('../lib');
+// const lib = require('../lib');
 const mkdirp = require('mkdirp');
 const readline = require('readline');
 const tools = require('../tools');

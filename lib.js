@@ -73,7 +73,7 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
             let config = JSON.parse(data);
             let compare = semver(config.version, atomar_config.atomar_version);
             if(compare === -1) {
-                console.warn('WARING: This module supports an old version of Atomar');
+                console.warn('WARING: This module supports an older version of Atomar');
             } else if(compare === 1) {
                 console.warn('WARING: This module supports a newer version of Atomar');
             }
