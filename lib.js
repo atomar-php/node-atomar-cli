@@ -77,14 +77,18 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
         let data = fs.readFileSync(sub_module_config, 'utf8');
         try {
             let config = JSON.parse(data);
-            let compare = semver(config.version, atomar_config.atomar_version);
-            if(compare === -1) {
-                console.warn('- WARING: This module supports an older version of Atomar.');
-            } else if(compare === 1) {
-                console.warn('- WARING: This module supports a newer version of Atomar.');
+            if(typeof config.atomar_version !== 'undefined') {
+                let compare = semver(config.atomar_version, atomar_config.atomar_version);
+                if (compare === -1) {
+                    console.warn('- WARING: ' + module.slug + ' supports an older version of Atomar.');
+                } else if (compare === 1) {
+                    console.warn('- WARING: ' + module.slug + ' supports a newer version of Atomar.');
+                }
+            } else {
+                console.warn('\n- WARNING: ' + module.slug + ' is missing the "atomar_version" in it\'s ' + atomar_config.package_file + ' file.');
             }
         } catch (err) {
-            console.warn('\n- WARING: This module\'s ' + atomar_config.package_file + ' file appears to be corrupt.');
+            console.warn('\n- WARING: ' + module.slug + ' has a corrupt ' + atomar_config.package_file + ' file.');
             console.error(err);
         }
     } else {
