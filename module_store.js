@@ -44,7 +44,7 @@ function lookup_github(name, version) {
     }
 
     return {
-        commit: tag ? tag.commit.sha : null,
+        tag: tag,
         version: tag ? tag.name : '*',
         owner: owner,
         slug: module_slug,

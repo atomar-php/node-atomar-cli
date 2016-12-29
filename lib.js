@@ -23,7 +23,7 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
         let module_config = atomar_config.loadPackage();
         if(module_config === null) {
             console.error('Not an Atomar module');
-            return;
+            return false;
         }
     }
 
@@ -40,17 +40,20 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
 
     // install
     if(!tools.fileExists(install_path)) {
+        console.log('\nInstalling...');
         shell.exec('git clone ' + remote + ' ' + install_path);
     }
 
     // update
     if(tools.fileExists(install_path)) {
+        console.log('\nUpdating...');
         shell.exec('cd ' + install_path + ' && git fetch origin');
     }
 
     // checkout Version
-    if(module.commit) {
-        shell.exec('cd ' + install_path + ' && git checkout ' + module.commit);
+    if(module.tag) {
+        console.log('\nChecking out ' + module.tag.name + '...');
+        shell.exec('cd ' + install_path + ' && git checkout ' + module.tag.name);
     }
 
     console.log(module.slug + ' installed to ' + install_path);
@@ -86,6 +89,7 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
     }
 
     console.log('Done.');
+    return true;
 }
 
 /**
@@ -103,7 +107,7 @@ function run_composer(working_dir) {
     let composer_installer = path.join(atomar_config.cache_dir, 'composer.php');
     let composer = path.join(atomar_config.cache_dir, 'composer.phar');
     if(!tools.fileExists(composer)) {
-        console.log('Getting composer');
+        console.log('\nInstalling composer...');
         cmd = 'curl -sS https://getcomposer.org/installer -o ' + composer_installer;
         cmd += ' && php ' + composer_installer + ' --install-dir=' + atomar_config.cache_dir;
         cmd += ' && rm ' + composer_installer;
@@ -111,11 +115,12 @@ function run_composer(working_dir) {
     }
 
     // update
+    console.log('\nUpdating dependencies...');
     cmd = composer + ' update -d=' + working_dir;
     shell.exec(cmd);
 
     // install
-    console.log('Installing dependencies');
+    console.log('\nInstalling composer...');
     cmd = composer + ' install -d=' + working_dir;
     shell.exec(cmd);
 }
