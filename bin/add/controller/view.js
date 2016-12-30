@@ -76,15 +76,19 @@ exports.handler = function(argv) {
     }
 
     // add route
-    let route = '/' + relativePath.replace(/\\+/g, '/').replace(/^\/+/, '').replace(/\/+$/, '') + '/?(\\?.*)?';
+    let route = '/' + relativePath.replace(/\\+/g, '/').replace(/^\/+/, '').replace(/\/+$/, '') + '/' + className.toLowerCase() + '/?(\\?.*)?';
     route = route.replace(/^\/\//g, '/');
-    console.log('- Adding route');
-    routes[route] = classNamespace + '\\' + className;
-    try {
-        fs.writeFileSync(routesFile, JSON.stringify(routes, null, 2), 'utf8');
-    } catch (err) {
-        console.warn('\n- WARNING: could not save routes');
-        console.error(err);
+    if(!routes[route]) {
+        console.log('- Adding route');
+        routes[route] = classNamespace + '\\' + className;
+        try {
+            fs.writeFileSync(routesFile, JSON.stringify(routes, null, 2), 'utf8');
+        } catch (err) {
+            console.warn('\n- WARNING: could not save routes');
+            console.error(err);
+        }
+    } else {
+        console.log('- WARNING: route already exists:\n' + route);
     }
 
     console.log('Finished!');
