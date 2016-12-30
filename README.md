@@ -43,7 +43,7 @@ $ atomar init
 Add some controllers.
 If you do not specify otherwise a route will be automatically generated for this controller.
 ```bash
-$ atomar add controller view Index
+$ atomar add view Index
 ```
 
 Add some dependencies.
