@@ -46,16 +46,17 @@ If you do not specify otherwise a route will be automatically generated for this
 $ atomar add controller view Index
 ```
 
-Add some dependencies. After adding dependencies you can always update them
-(including any composer dependencies) by running the command without specifying
+Add some dependencies.
 a module to install.
 ```bash
 $ atomar install files
+... or to update existing
+$ atomar install
 ```
 
 Deploy your site. In this example we globally install the Atomar framework before deploying.
 You only need to do this once or whenever there is an update available.
-The deploy command will automatically link the deployment to the framework.
+The deploy command will automatically link the deployment to the globally framework.
 ```bash
 $ atomar install atomar -g
 $ atomar deploy ~/www/my_site
