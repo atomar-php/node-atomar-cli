@@ -109,13 +109,19 @@ function init(dir) {
             mkdirp.sync(path.dirname(filepath));
             fs.writeFileSync(filepath, JSON.stringify(config, null, 2), 'utf8');
 
-            // copy hooks and install scripts
             let templates = path.join(__dirname, 'init', 'templates');
+
+            // copy hooks
             let hooksPath = path.join(dir, 'Hooks.php');
             if(!tools.fileExists(hooksPath)) {
                 tools.injectTemplate(path.join(templates, 'Hooks.php'), hooksPath, {
                     namespace: config.name,
                 });
+            }
+            // copy routes
+            let publicRoutesPath = path.join(dir, atomar_config.routes_dir, 'public.js');
+            if(!tools.fileExists(publicRoutesPath)) {
+                tools.injectTemplate(path.join(templates, 'public.json'), publicRoutesPath);
             }
 
             return Promise.resolve(filepath);

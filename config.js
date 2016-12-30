@@ -19,6 +19,7 @@ let atomarVersion = '0.2.0';
 let settings = {
     controllers_dir: 'controller',
     views_dir: 'views',
+    routes_dir: 'routes',
     package_file: 'atomar.json',
     atomar_version: atomarVersion,
     cache_dir: cacheDir,
