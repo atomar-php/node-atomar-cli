@@ -7,7 +7,11 @@ const util = require('./controller_util');
 exports.command = 'lightbox <name>';
 exports.describe = 'Creates a lightbox controller';
 exports.builder = {
-
+    r: {
+        alias: 'route',
+        description: 'Automatically generates a route for the lightbox',
+        default: false
+    }
 };
 exports.handler = function(argv) {
     let info = util.prepare(argv, {
@@ -32,8 +36,10 @@ exports.handler = function(argv) {
     }
 
     // add route
-    console.log('- Adding route');
-    util.writeRoute(info.routesFile, info.routes);
+    if(argv.r) {
+        console.log('- Adding route');
+        util.writeRoute(info.routesFile, info.routes);
+    }
 
     console.log('Finished!');
 };

@@ -7,7 +7,11 @@ const util = require('./controller_util');
 exports.command = 'view <name>';
 exports.describe = 'Create a view controller';
 exports.builder = {
-
+    r: {
+        alias: 'route',
+        description: 'Automatically generates a route for the view',
+        default: false
+    }
 };
 exports.handler = function(argv) {
     let info = util.prepare(argv);
@@ -30,8 +34,10 @@ exports.handler = function(argv) {
     }
 
     // add route
-    console.log('- Adding route');
-    util.writeRoute(info.routesFile, info.routes);
+    if(argv.r) {
+        console.log('- Adding route');
+        util.writeRoute(info.routesFile, info.routes);
+    }
 
     console.log('Finished!');
 };
