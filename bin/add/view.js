@@ -1,11 +1,11 @@
 'use strict';
 
 const path = require('path');
-const tools = require('../../../tools');
+const tools = require('../../tools');
 const util = require('./controller_util');
 
 exports.command = 'view <name>';
-exports.describe = 'Create a view controller';
+exports.describe = 'Creates a view controller';
 exports.builder = {
     r: {
         alias: 'route',

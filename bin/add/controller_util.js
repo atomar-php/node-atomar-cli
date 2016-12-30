@@ -2,8 +2,8 @@
 
 const path = require('path');
 const mkdirp = require('mkdirp');
-const tools = require('../../../tools');
-const atomar_config = require('../../../config');
+const tools = require('../../tools');
+const atomar_config = require('../../config');
 const fs = require('fs');
 
 module.exports = {

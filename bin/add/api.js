@@ -1,11 +1,11 @@
 'use strict';
 
 const path = require('path');
-const tools = require('../../../tools');
+const tools = require('../../tools');
 const util = require('./controller_util');
 
 exports.command = 'api <name>';
-exports.describe = 'Create a RESTfull API controller';
+exports.describe = 'Creates a RESTfull API controller';
 exports.builder = {
     r: {
         alias: 'route',

@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const tools = require('../../../tools');
+const tools = require('../../tools');
 const util = require('./controller_util');
 
 exports.command = 'lightbox <name>';
