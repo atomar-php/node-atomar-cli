@@ -119,7 +119,7 @@ function init(dir) {
                 });
             }
             // copy routes
-            let publicRoutesPath = path.join(dir, atomar_config.routes_dir, 'public.js');
+            let publicRoutesPath = path.join(dir, atomar_config.routes_dir, 'public.json');
             if(!tools.fileExists(publicRoutesPath)) {
                 tools.injectTemplate(path.join(templates, 'public.json'), publicRoutesPath);
             }

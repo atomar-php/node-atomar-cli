@@ -9,7 +9,10 @@ let mkdirp = require('mkdirp');
  * @param string
  */
 function className(string) {
-    return string.replace(/[^a-zA-Z0-9]+/g, '');
+    // remove special characters
+    string = string.replace(/[^a-zA-Z0-9]+/g, '');
+    // uppercase first character
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 /**
