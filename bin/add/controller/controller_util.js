@@ -69,7 +69,6 @@ module.exports = {
         let route = '/' + relativePath.replace(/\\+/g, '/').replace(/^\/+/, '').replace(/\/+$/, '') + '/' + className.toLowerCase() + opts.route_suffix + '/?(\\?.*)?';
         route = route.replace(/^\/\//g, '/');
         if(!routes[route]) {
-            console.log('- Adding route');
             routes[route] = classNamespace + '\\' + className;
         } else {
             console.log('- WARNING: route already exists:\n' + route);

@@ -10,7 +10,7 @@ exports.builder = {
     r: {
         alias: 'route',
         description: 'Automatically generates a route for the api',
-        default: false
+        default: true
     }
 };
 exports.handler = function(argv) {

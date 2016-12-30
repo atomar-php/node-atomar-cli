@@ -10,7 +10,7 @@ exports.builder = {
     r: {
         alias: 'route',
         description: 'Automatically generates a route for the view',
-        default: false
+        default: true
     }
 };
 exports.handler = function(argv) {
@@ -34,7 +34,7 @@ exports.handler = function(argv) {
     }
 
     // add route
-    if(argv.r) {
+    if(argv.r === true || argv.r === 'true') {
         console.log('- Adding route');
         util.writeRoute(info.routesFile, info.routes);
     }
