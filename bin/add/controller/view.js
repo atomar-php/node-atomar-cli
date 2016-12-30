@@ -35,7 +35,7 @@ exports.handler = function(argv) {
     }
     let classFile = path.join(process.cwd(), classDir,  className + '.php');
     let viewFile = path.join(process.cwd(), viewDir, className.toLowerCase() + '.html');
-    let classNamespace = info.name + '\\' + classDir.replace(/\/+/, '\\');
+    let classNamespace = info.name + '\\' + classDir.replace(/\/+/g, '\\');
     let routesFile = path.join(process.cwd(), atomar_config.routes_dir, 'public.json');
 
     // skip duplicates
@@ -76,8 +76,8 @@ exports.handler = function(argv) {
     }
 
     // add route
-    let route = '/' + relativePath.replace(/\\+/, '/').replace(/^\/+/, '').replace(/\/+$/, '') + '/?(\\?.*)?';
-    route = route.replace(/^\/\//, '/');
+    let route = '/' + relativePath.replace(/\\+/g, '/').replace(/^\/+/, '').replace(/\/+$/, '') + '/?(\\?.*)?';
+    route = route.replace(/^\/\//g, '/');
     console.log('- Adding route');
     routes[route] = classNamespace + '\\' + className;
     try {
