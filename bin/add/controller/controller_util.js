@@ -12,12 +12,12 @@ module.exports = {
      * @param argv
      * @param opts
      */
-    prepare: function(argv, opts) {
-        if(typeof opts === 'undefined') {
-            opts = {
-                view_prefix: ''
-            };
-        }
+    prepare: function(argv, opts={}) {
+        let defaults = {
+            view_prefix: '',
+            route_suffix: ''
+        };
+        opts = Object.assign({}, defaults, opts);
 
         let info = atomar_config.loadPackage();
         if(!info) throw new Error('Not an Atomar module. Try running inside a module.');
@@ -66,7 +66,7 @@ module.exports = {
         }
 
         // add route
-        let route = '/' + relativePath.replace(/\\+/g, '/').replace(/^\/+/, '').replace(/\/+$/, '') + '/' + className.toLowerCase() + '/?(\\?.*)?';
+        let route = '/' + relativePath.replace(/\\+/g, '/').replace(/^\/+/, '').replace(/\/+$/, '') + '/' + className.toLowerCase() + opts.route_suffix + '/?(\\?.*)?';
         route = route.replace(/^\/\//g, '/');
         if(!routes[route]) {
             console.log('- Adding route');

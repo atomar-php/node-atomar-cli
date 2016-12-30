@@ -14,7 +14,9 @@ exports.builder = {
     }
 };
 exports.handler = function(argv) {
-    let info = util.prepare(argv);
+    let info = util.prepare(argv, {
+        route_suffix: '/(?P<api>[a-zA-Z\\_-]+)'
+    });
 
     let templates = path.join(__dirname, 'templates');
 
