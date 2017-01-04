@@ -10,7 +10,7 @@
     "login_attempts": 5,
     "login_attempts_time": 7200,
     "password_reset_ttl": 172800,
-    "session_ttl": 172800,
+    "session_ttl": 1800,
     "session_name": "example_site",
     "session_id_regeneration_period": 3600,
     "secure_session": false
