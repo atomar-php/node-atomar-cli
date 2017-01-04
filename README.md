@@ -50,10 +50,13 @@ Add some dependencies.
 > NOTE: when installing a specific version we are searching for matching tags.
 > The tag on the repository should be a properly formed sematic version 
 > but the version you give to the cli may be shorthand and contain wild cards such as `1.*`.
+
 ```bash
 $ atomar install files
 ... or to install a specific version
 $ atomar install files -v 1.0
+... or install a branch
+$ atomar install files -v master
 ... or to update/install all existing dependencies
 $ atomar install
 ```
