@@ -17,6 +17,7 @@ describe('module_store', () => {
     it('should look up a module', () => {
         let realfs = require.requireActual('fs');
         shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-tags-lookup.json');
+        shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-branches-lookup.json');
 
         let module = store.lookup_module('atomar', '*');
         expect(module.version).toEqual('0.2');
@@ -25,6 +26,7 @@ describe('module_store', () => {
     it('should look up a module version', () => {
         let realfs = require.requireActual('fs');
         shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-tags-lookup.json');
+        shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-branches-lookup.json');
 
         let module = store.lookup_module('atomar', '0.1.1');
         expect(module.version).toEqual('0.1.1');
@@ -33,6 +35,7 @@ describe('module_store', () => {
     it('should look up a module version and fall back to wildcard', () => {
         let realfs = require.requireActual('fs');
         shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-tags-lookup.json');
+        shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-branches-lookup.json');
 
         try {
             let module = store.lookup_module('atomar', '3.0');
@@ -42,9 +45,28 @@ describe('module_store', () => {
         }
     });
 
+    it('should look up a module by master branch', () => {
+        let realfs = require.requireActual('fs');
+        shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-tags-lookup.json');
+        shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-branches-lookup.json');
+
+        let module = store.lookup_module('atomar', 'master');
+        expect(module.ref.name).toEqual('master');
+    });
+
+    it('should look up a module by develop branch', () => {
+        let realfs = require.requireActual('fs');
+        shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-tags-lookup.json');
+        shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-branches-lookup.json');
+
+        let module = store.lookup_module('atomar', 'develop');
+        expect(module.ref.name).toEqual('develop');
+    });
+
     it('should support integer version numbers', () => {
         let realfs = require.requireActual('fs');
         shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-tags-lookup.json');
+        shelljs.__queueStdout = realfs.readFileSync('__tests__/data/valid-branches-lookup.json');
 
         try {
             let module = store.lookup_module('atomar', 3);

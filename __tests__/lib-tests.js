@@ -29,7 +29,7 @@ describe('lib', () => {
                 clone: {
                     http: 'https://github.com/atomar-php/atomar'
                 },
-                tag: {
+                ref: {
                     "name": "0.2",
                     "zipball_url": "https://api.github.com/repos/atomar-php/atomar/zipball/0.2",
                     "tarball_url": "https://api.github.com/repos/atomar-php/atomar/tarball/0.2",

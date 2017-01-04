@@ -47,10 +47,14 @@ $ atomar add view Index
 ```
 
 Add some dependencies.
-a module to install.
+> NOTE: when installing a specific version we are searching for matching tags.
+> The tag on the repository should be a properly formed sematic version 
+> but the version you give to the cli may be shorthand and contain wild cards such as `1.*`.
 ```bash
 $ atomar install files
-... or to update existing
+... or to install a specific version
+$ atomar install files -v 1.0
+... or to update/install all existing dependencies
 $ atomar install
 ```
 

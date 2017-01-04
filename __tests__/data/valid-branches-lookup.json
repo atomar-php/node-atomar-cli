@@ -1,0 +1,16 @@
+[
+  {
+    "name": "develop",
+    "commit": {
+      "sha": "bdb1ddbf1b5fb0b1f90afd0aa0a1072e668b83b3",
+      "url": "https://api.github.com/repos/atomar-php/atomar/commits/bdb1ddbf1b5fb0b1f90afd0aa0a1072e668b83b3"
+    }
+  },
+  {
+    "name": "master",
+    "commit": {
+      "sha": "ce5eb94a9c6682bf3e52d8a9606505e8de87736d",
+      "url": "https://api.github.com/repos/atomar-php/atomar/commits/ce5eb94a9c6682bf3e52d8a9606505e8de87736d"
+    }
+  }
+]

@@ -52,9 +52,9 @@ function install_module(module_name, version, install_path, clone_with_ssh) {
     }
 
     // checkout Version
-    if(module.tag) {
-        console.log('\n- Checking out ' + module.tag.name + '...');
-        shell.exec('cd ' + install_path + ' && git checkout ' + module.tag.name);
+    if(module.ref) {
+        console.log('\n- Checking out ' + module.ref.name + '...');
+        shell.exec('cd ' + install_path + ' && git checkout ' + module.ref.name);
     } else {
         console.warn('\n- WARNING: No versions available so tracking master.');
         shell.exec('cd ' + install_path + ' && git checkout master');
