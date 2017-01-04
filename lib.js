@@ -129,12 +129,6 @@ function run_composer(working_dir) {
         shell.exec(cmd);
     }
 
-    // TODO: we probably shouldn't do this because users can't depend on their set versions.
-    // update
-    console.log('\n- Composer: Updating...');
-    cmd = composer + ' update -d=' + working_dir;
-    shell.exec(cmd);
-
     // install
     console.log('\n- Composer: Installing...');
     cmd = composer + ' install -d=' + working_dir;
