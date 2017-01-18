@@ -14,7 +14,8 @@ let mkdirp = require('mkdirp');
 let cacheDir = path.join(tools.homeDir(), '.atomar');
 let modulesDir = path.join(cacheDir, 'atomar_modules');
 // TODO: it would be great if we could pull this value from the web and notify users if there is an update
-let atomarVersion = '0.2.0';
+// for now we default to the first major release for simplicity
+let atomarVersion = '1.*';
 
 let settings = {
     controllers_dir: 'controller',
