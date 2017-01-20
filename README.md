@@ -1,9 +1,6 @@
 A CLI that provides handy tools for using the [Atomar PHP](https://github.com/atomar-php/atomar) framework.
 --
 
-There are lots of PHP frameworks available.
-But how many have a well designed CLI that supports not only adding components
-but installing dependencies based on an open standard? Just one.
 
 ##Installing
 ```
