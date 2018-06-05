@@ -1,19 +1,20 @@
 A CLI that provides handy tools for using the [Atomar PHP](https://github.com/atomar-php/atomar) framework.
 --
 
+> This has been a fun project but I am no longer maitaining this. A lot of good php frameworks have been developed over the years that include the features I desired and more.
 
-##Installing
+# Installing
 ```
 npm install -g atomar-cli
 ```
 
-##Usage
+# Usage
 See the help for a list of commands and how to use them
 ```
 atomar --help
 ```
 
-##Customization
+# Customization
 You can customize this tool by adding the file `~/.atomar/config.json`
 
 Default Values:
@@ -28,7 +29,7 @@ Default Values:
 
 > NOTE: the `repo_prefix` applies to all repositories except if the repo name is `atomar`
 
-##Quick Start
+# Quick Start
 
 Set up a new module
 ```bash
